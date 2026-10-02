@@ -1,24 +1,40 @@
 <!doctype html>
 <html lang="en"><head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="description" content="VelocityType — a premium typing speed platform built for focused practice and measurable progress."><meta name="theme-color" content="#08090d">
-<title>VelocityType — Find Your Flow</title>
+<meta name="description" content="VelocityType — a premium, offline-first typing speed platform built for focused practice and measurable progress.">
+<meta name="theme-color" content="#08090d"><meta name="color-scheme" content="dark">
+<title>VelocityType — Typing, refined.</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="css/reset.css"><link rel="stylesheet" href="css/variables.css"><link rel="stylesheet" href="css/typography.css"><link rel="stylesheet" href="css/layout.css"><link rel="stylesheet" href="css/navbar.css"><link rel="stylesheet" href="css/footer.css"><link rel="stylesheet" href="css/utilities.css">
+<link rel="stylesheet" href="css/reset.css"><link rel="stylesheet" href="css/variables.css"><link rel="stylesheet" href="css/typography.css"><link rel="stylesheet" href="css/layout.css"><link rel="stylesheet" href="css/navbar.css"><link rel="stylesheet" href="css/footer.css"><link rel="stylesheet" href="css/utilities.css"><link rel="stylesheet" href="css/landing.css">
 </head><body>
 <div class="loading-screen" id="loading-screen" aria-hidden="true"><div class="loading-screen__mark">V<span>.</span></div><span class="loading-screen__label">Preparing your workspace</span><span class="loading-screen__track"><span></span></span></div>
+<div class="landing-bg" aria-hidden="true"><div class="landing-grid"></div><span class="landing-orb landing-orb--one"></span><span class="landing-orb landing-orb--two"></span><span class="landing-orb landing-orb--three"></span></div>
 <div id="app" class="app-shell"><header class="site-header"><nav class="navbar container" aria-label="Main navigation">
 <a class="brand" href="#top" aria-label="VelocityType home"><span class="brand__mark" aria-hidden="true">V</span><span class="brand__name">velocity<span>type</span></span></a>
-<div class="navbar__links"><a class="navbar__link navbar__link--active" href="#top" aria-current="page">Overview</a><a class="navbar__link" href="#features">Features</a><a class="navbar__link" href="#footer">About</a></div>
-<a class="button button--small button--primary" href="#workspace">Get started <span aria-hidden="true">↗</span></a></nav></header>
-<main id="top" class="app-main"><section id="workspace" class="app-placeholder glass-panel" aria-labelledby="app-title">
-<span class="app-placeholder__eyebrow"><span class="status-dot"></span> YOUR SPACE TO IMPROVE</span><h1 id="app-title">Find your <span class="text-gradient">flow.</span></h1>
-<p>Build speed, sharpen accuracy, and turn every keystroke into progress. Your premium typing workspace is taking shape.</p>
-<a class="button button--primary app-placeholder__cta" href="#features">Explore the experience <span aria-hidden="true">↓</span></a><div class="foundation-note"><span class="foundation-note__icon" aria-hidden="true">✦</span> Thoughtfully built for focused practice.</div>
-</section><section id="features" class="foundation-features container" aria-label="Platform principles">
-<article class="feature-tile glass-panel"><span class="feature-tile__icon" aria-hidden="true">⌁</span><h2>Find your rhythm</h2><p>A calm, distraction-aware space designed to keep your attention on the words.</p></article>
-<article class="feature-tile glass-panel"><span class="feature-tile__icon" aria-hidden="true">↗</span><h2>Track your progress</h2><p>A foundation for meaningful insights as your practice history grows.</p></article>
-<article class="feature-tile glass-panel"><span class="feature-tile__icon" aria-hidden="true">◈</span><h2>Your data stays yours</h2><p>Designed around local-first storage, without accounts or a required backend.</p></article>
-</section></main>
+<div class="navbar__links"><a class="navbar__link navbar__link--active" href="#top">Overview</a><a class="navbar__link" href="#features">Features</a><a class="navbar__link" href="#principles">Principles</a></div>
+<a class="button button--small button--primary" href="#workspace">Open workspace <span aria-hidden="true">↗</span></a></nav></header>
+<main id="top" class="app-main">
+<section id="workspace" class="hero container">
+<div class="hero-grid">
+<div class="hero-copy reveal"><span class="hero-badge"><span class="status-dot"></span> Offline-first • zero accounts required</span>
+<h1>Typing should feel <span class="text-gradient">effortless.</span></h1>
+<p>A focused typing environment built around speed, accuracy, rhythm, and progress — with your practice history staying on your device.</p>
+<div class="hero-actions"><a class="button button--primary" href="#features">Explore VelocityType <span aria-hidden="true">↓</span></a><a class="button button--ghost" href="#principles">See how it works</a></div>
+<div class="hero-proof"><span class="hero-proof__item"><strong>15–120s</strong> test lengths</span><span class="hero-proof__item"><strong>Local-first</strong> progress</span><span class="hero-proof__item"><strong>Vanilla JS</strong> engine</span></div></div>
+<div class="preview-wrap reveal" style="transition-delay:90ms">
+<div class="typing-preview" aria-label="VelocityType typing preview">
+<div class="typing-preview__top"><div class="window-dots"><span class="window-dot"></span><span class="window-dot"></span><span class="window-dot"></span></div><span class="preview-mode">Live practice preview</span></div>
+<div class="typing-preview__body"><div class="preview-stats"><div class="preview-stat"><div class="preview-stat__value numeric">128</div><div class="preview-stat__label">WPM</div></div><div class="preview-stat"><div class="preview-stat__value numeric">98.6%</div><div class="preview-stat__label">Accuracy</div></div><div class="preview-stat"><div class="preview-stat__value numeric">00:42</div><div class="preview-stat__label">Time</div></div></div>
+<div class="preview-text" aria-hidden="true"><span class="typed">Precision comes from repetition,</span> <span>and rhythm turns speed into control.</span><span class="preview-caret"></span></div>
+<div class="preview-footer"><div class="preview-progress"><span></span></div><small class="numeric">73%</small></div></div></div></div>
+</div>
+</section>
+<section id="features" class="section container"><div class="section-heading reveal"><span class="eyebrow">The experience</span><h2>Everything important. Nothing in your way.</h2><p>VelocityType is being shaped as a focused practice system rather than a crowded dashboard.</p></div>
+<div class="bento"><article class="bento-card bento-card--wide glass-panel reveal"><span class="bento-card__eyebrow">Practice</span><h3>Find your rhythm.</h3><p>Clean feedback, readable typography, and a typing surface designed to keep the next keystroke obvious.</p><div class="bento-card__visual" aria-hidden="true"></div></article>
+<article class="bento-card glass-panel reveal" style="transition-delay:70ms"><span class="bento-card__eyebrow">Progress</span><h3>See improvement.</h3><p>Turn each session into local, understandable metrics.</p><div class="mini-bars bento-card__visual" aria-hidden="true"><span style="--h:24%"></span><span style="--h:42%"></span><span style="--h:36%"></span><span style="--h:57%"></span><span style="--h:69%"></span><span style="--h:83%"></span><span style="--h:95%"></span></div></article>
+<article class="bento-card bento-card--tall glass-panel reveal" style="transition-delay:110ms"><span class="bento-card__eyebrow">Local-first</span><h3>Your history stays close.</h3><p>No account, no required server, no paid API. The product is designed to work from a static deployment and keep practice data in Local Storage.</p><div class="bento-card__visual" aria-hidden="true"></div></article>
+<article class="bento-card bento-card--tall glass-panel reveal" style="transition-delay:150ms"><span class="bento-card__eyebrow">Control</span><h3>Make the workspace yours.</h3><p>Theme, font, cursor, sound, animation, layout, import, export, and reset are part of the planned native settings layer.</p><div class="bento-card__visual" aria-hidden="true"></div></article></div></section>
+<section id="principles" class="section container"><div class="section-heading reveal"><span class="eyebrow">Built in layers</span><h2>One calm system, assembled piece by piece.</h2></div><div class="principles"><article class="principle glass-panel reveal"><span class="principle__number">01</span><h3>Engine first</h3><p>The typing loop will be deterministic, responsive, and independently testable.</p></article><article class="principle glass-panel reveal" style="transition-delay:70ms"><span class="principle__number">02</span><h3>Data second</h3><p>Completed runs become structured local records that power history and charts.</p></article><article class="principle glass-panel reveal" style="transition-delay:140ms"><span class="principle__number">03</span><h3>Polish last — but deeply</h3><p>Accessibility, performance, motion, responsive behavior, and visual detail get their own QA pass.</p></article></div></section>
+</main>
 <footer id="footer" class="site-footer"><div class="container site-footer__inner"><a class="brand brand--footer" href="#top"><span class="brand__mark" aria-hidden="true">V</span><span class="brand__name">velocity<span>type</span></span></a><p>Made for the momentum of getting better.</p><span class="site-footer__copyright">© <span id="copyright-year">2026</span> VelocityType</span></div></footer></div>
-<script type="module" src="js/app.js"></script></body></html>
+<script type="module" src="js/app.js"></script><script type="module" src="js/landing.js"></script></body></html>
