@@ -10,6 +10,9 @@ No React, Vue, Angular, backend, database, Firebase, Node.js, AI APIs, or paid A
 - Live WPM, CPM, accuracy, error, and timer metrics
 - Pause, resume, restart, completion state, and character feedback
 - Completed sessions stored in Local Storage\n- Local progress dashboard with personal best, session count, average accuracy, and recent runs
+- Weekly average-WPM chart and practice-pattern insight, rendered locally
+- Workspace personalization and local history import/export
+- PWA manifest and static service-worker cache foundation
 - Semantic, responsive application shell
 - Dark-first premium design tokens and typography
 - Glassmorphism utility system
@@ -27,11 +30,10 @@ The repo is intentionally being assembled in small, independently testable layer
 3. Typing UI
 4. Deterministic typing engine
 5. Results + local history
-6. Charts + statistics
+6. Weekly charts + statistics (initial layer)
 7. Achievements
 8. Keyboard / finger analytics
-9. Settings + import/export
-10. Accessibility, performance, and final QA
+9. Accessibility, performance, and final QA
 
 ## Run locally
 Open index.html in a modern browser. No build step or backend is required. Google Fonts are optional; system fallbacks keep the interface usable without network access.
