@@ -179,6 +179,7 @@ function finish(reason){
   els.resultDetail.textContent=Math.round(m.wpm)+" WPM · "+m.accuracy.toFixed(1)+"% accuracy · "+state.errors+" errors · "+formatTime(state.elapsedBeforePause);
   const session={wpm:Math.round(m.wpm),cpm:Math.round(m.cpm),accuracy:Number(m.accuracy.toFixed(1)),errors:state.errors,duration:state.duration,mode:state.mode,elapsed:state.elapsedBeforePause,createdAt:new Date().toISOString()};
   saveSession(session);
+  window.dispatchEvent(new CustomEvent("velocitytype:session-complete",{detail:session}));
   if(els.resultBest){
     els.resultBest.textContent="Personal best: "+getBestWpm()+" WPM";
   }
