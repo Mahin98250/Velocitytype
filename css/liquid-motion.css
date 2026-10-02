@@ -94,3 +94,41 @@ body{background:radial-gradient(ellipse at 50% -25%,rgba(86,106,211,.13),transpa
 }
 [data-force-reduced-motion="true"] .landing-bg:before,[data-force-reduced-motion="true"] .landing-bg:after,[data-force-reduced-motion="true"] .typing-preview,[data-force-reduced-motion="true"] .typing-preview:after,[data-force-reduced-motion="true"] .reveal{animation:none!important;filter:none;opacity:1;transform:none;transition:none}
 [data-force-reduced-motion="true"] .bento-card,[data-force-reduced-motion="true"] .principle,[data-force-reduced-motion="true"] .progress-stat,[data-force-reduced-motion="true"] .history-card,[data-force-reduced-motion="true"] .analytics-card,[data-force-reduced-motion="true"] .button,[data-force-reduced-motion="true"] .icon-button{transition:none}
+
+/* Reference-led refinement: floating navigation glass, calm content planes,
+   and tactile controls. Inspired by Apple's published Liquid Glass principles. */
+.site-header{height:auto;padding:10px var(--page-gutter) 0;background:transparent;border:0;pointer-events:none}
+.site-header .navbar{pointer-events:auto;width:min(100%,1100px);height:58px;padding:0 15px;border:1px solid rgba(255,255,255,.17);border-radius:22px;background:linear-gradient(125deg,rgba(255,255,255,.13),rgba(255,255,255,.045) 42%,rgba(116,139,255,.07)),rgba(12,15,24,.68);box-shadow:0 14px 44px rgba(0,0,0,.25),inset 0 1px rgba(255,255,255,.2),inset 0 -1px rgba(255,255,255,.035);-webkit-backdrop-filter:blur(22px) saturate(180%);backdrop-filter:blur(22px) saturate(180%);transition:background 320ms var(--motion-spring),box-shadow 320ms var(--motion-spring),border-color 320ms var(--motion-spring),transform 320ms var(--motion-spring)}
+.site-header.is-scrolled .navbar{background:linear-gradient(125deg,rgba(255,255,255,.11),rgba(255,255,255,.035) 48%,rgba(116,139,255,.06)),rgba(9,11,18,.82);border-color:rgba(255,255,255,.2);box-shadow:0 12px 36px rgba(0,0,0,.28),inset 0 1px rgba(255,255,255,.17)}
+.site-header .navbar:before{position:absolute;inset:0;border-radius:inherit;content:"";pointer-events:none;background:linear-gradient(110deg,rgba(255,255,255,.13),transparent 34%,transparent 72%,rgba(126,157,255,.08));opacity:.8}
+.site-header .navbar>*{position:relative;z-index:1}
+.navbar__links{gap:clamp(.7rem,2vw,1.35rem);padding:.25rem .6rem;border:0;background:transparent}
+.navbar__link{font-size:.72rem;white-space:nowrap}
+.navbar__link--active{padding-inline:.65rem;border-radius:999px;background:rgba(255,255,255,.105);box-shadow:inset 0 1px rgba(255,255,255,.13)}
+.navbar__link--active:after{display:none}
+.navbar__right .button--ghost{border-color:rgba(255,255,255,.1);background:rgba(255,255,255,.045);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+/* Keep reading/practice content visually quieter than the floating control plane. */
+.glass-panel,.analytics-card,.progress-stat,.history-card,.practice-card,.principle,.bento-card{ -webkit-backdrop-filter:none;backdrop-filter:none;background:linear-gradient(145deg,rgba(255,255,255,.052),rgba(255,255,255,.018) 55%,rgba(91,111,191,.025)),rgba(15,18,27,.91);box-shadow:0 18px 48px rgba(0,0,0,.2),inset 0 1px rgba(255,255,255,.09)}
+.glass-panel:before,.analytics-card:before,.progress-stat:before,.history-card:before,.practice-card:before,.principle:before,.bento-card:before{opacity:.38}
+.practice-toolbar{position:relative;z-index:2;padding:.55rem;border:1px solid rgba(255,255,255,.11);border-radius:17px;background:linear-gradient(130deg,rgba(255,255,255,.085),rgba(255,255,255,.025)),rgba(8,10,17,.6);box-shadow:inset 0 1px rgba(255,255,255,.12),0 8px 28px rgba(0,0,0,.12);-webkit-backdrop-filter:blur(12px) saturate(160%);backdrop-filter:blur(12px) saturate(160%)}
+.segmented{border-color:rgba(255,255,255,.07);background:rgba(0,0,0,.2)}
+.segmented button.is-active{background:linear-gradient(145deg,rgba(255,255,255,.17),rgba(255,255,255,.075));box-shadow:inset 0 1px rgba(255,255,255,.2),0 2px 8px rgba(0,0,0,.12)}
+.icon-button{border-color:rgba(255,255,255,.12);background:linear-gradient(145deg,rgba(255,255,255,.09),rgba(255,255,255,.025));box-shadow:inset 0 1px rgba(255,255,255,.12)}
+.typing-surface{background:linear-gradient(145deg,rgba(255,255,255,.035),rgba(255,255,255,.012)),rgba(7,9,15,.88);border-color:rgba(255,255,255,.1);box-shadow:inset 0 1px rgba(255,255,255,.07),inset 0 0 36px rgba(105,126,220,.025)}
+.typing-surface.is-running{border-color:rgba(154,174,255,.38);box-shadow:inset 0 1px rgba(255,255,255,.1),0 0 0 1px rgba(124,140,255,.13),0 0 55px rgba(124,140,255,.075)}
+.settings-dialog{border-color:rgba(255,255,255,.22);box-shadow:0 35px 110px rgba(0,0,0,.55),inset 0 1px rgba(255,255,255,.2),inset 0 -1px rgba(255,255,255,.04)}
+.button--primary{background:linear-gradient(135deg,#aab4ff 0%,#7c8cff 48%,#6386f4 100%);color:#080b16;border:1px solid rgba(255,255,255,.35)}
+.button:focus-visible,.icon-button:focus-visible,.navbar__link:focus-visible,.segmented button:focus-visible{outline:2px solid rgba(160,184,255,.95);outline-offset:3px}
+@media(max-width:760px){
+ .site-header{padding:8px 10px 0}
+ .site-header .navbar{width:100%;height:54px;padding-inline:12px;border-radius:19px}
+ .navbar__links{display:none}
+ .navbar__right .button--primary{display:inline-flex}
+ .navbar__right .button--ghost{display:inline-flex}
+ .navbar__right{gap:.4rem}
+ .practice-toolbar{gap:.55rem;padding:.45rem}
+}
+@media(max-width:380px){.brand__name{font-size:.86rem}.brand__mark{width:30px;height:30px}.navbar__right .button{padding-inline:.55rem;font-size:.66rem}}
+@media(prefers-reduced-transparency:reduce){
+ .site-header .navbar,.practice-toolbar,.navbar__right .button--ghost{background:rgba(14,17,26,.97);-webkit-backdrop-filter:none;backdrop-filter:none}
+}
