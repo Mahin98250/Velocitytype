@@ -14,6 +14,9 @@ No React, Vue, Angular, backend, database, Firebase, Node.js, AI APIs, or paid A
 - Weekly average-WPM chart and practice-pattern insight, rendered locally
 - Workspace personalization and local history import/export
 - PWA manifest and static service-worker cache foundation
+- CSS-first Liquid Glass surfaces with adaptive tint, rim highlights, and restrained blur
+- Pointer-aware light sheen on fine-pointer devices; no canvas or continuous pointer animation
+- Transform/opacity-based motion, reduced-motion and reduced-transparency fallbacks
 - Semantic, responsive application shell
 - Dark-first premium design tokens and typography
 - Glassmorphism utility system
