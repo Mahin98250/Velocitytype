@@ -4,7 +4,7 @@
   const reduced=window.matchMedia("(prefers-reduced-motion: reduce)");
   const motionAllowed=()=>finePointer.matches&&!reduced.matches&&document.documentElement.dataset.forceReducedMotion!=="true";
   if(!motionAllowed())return;
-  const targets=".glass-panel,.typing-preview,.typing-surface";
+  const targets=".glass-panel,.typing-preview,.typing-surface,.navbar";
   let active=null,frame=0,x=0,y=0;
   document.addEventListener("pointerover",event=>{
     const node=event.target.closest?.(targets);
