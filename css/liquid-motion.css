@@ -286,3 +286,7 @@ html{scroll-behavior:smooth}
 body,.app-shell,.app-shell *{-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
 input,textarea,select,[contenteditable="true"],[data-selectable="true"],.result-detail,.analytics-insight__text,.about-intro,.about-tags span,.site-footer p{-webkit-user-select:text;user-select:text}
 button,a,label,.mobile-dock__item,.navbar__link{-webkit-user-select:none;user-select:none}
+
+/* Distinct app views: keep each navigation destination on its own screen. */
+html.js-pages [data-page][hidden]{display:none!important}
+html.js-pages [data-page]:not([hidden]){content-visibility:visible}
