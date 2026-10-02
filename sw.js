@@ -1,4 +1,4 @@
-const CACHE_NAME="velocitytype-static-v1";
+const CACHE_NAME="velocitytype-static-v2";
 const APP_SHELL=[
   "./",
   "./index.html",
@@ -14,10 +14,10 @@ const APP_SHELL=[
   "./css/landing.css",
   "./css/typing.css",
   "./css/progress.css",
-  "./css/settings.css",
+  "./css/settings.css","./css/liquid-motion.css",
   "./js/app.js",
   "./js/landing.js",
-  "./js/settings.js",
+  "./js/settings.js","./js/glass-motion.js",
   "./js/typing-engine.js",
   "./js/progress.js"
 ];
