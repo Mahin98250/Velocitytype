@@ -12,6 +12,15 @@ const TEST_TEXTS={
   ],
   code:[
     "function measureSpeed(correctChars, elapsedMs) { const minutes = elapsedMs / 60000; return minutes > 0 ? (correctChars / 5) / minutes : 0; }"
+  ],
+  numbers:[
+    "482 190 763 051 884 320 617 945 208 731 559 104 826 390 471 663 015 782 244 918 537 106 395 844."
+  ],
+  symbols:[
+    "! @ # $ % ^ & * ( ) _ + = - [ ] { } ; : , . ? / < > ~ |"
+  ],
+  mixed:[
+    "VelocityType v0.3 — practice at 120 WPM, keep accuracy above 98%, and let 2026-10-02 mark another focused session."
   ]
 };
 const DURATIONS=[15,30,60,120];
@@ -33,7 +42,10 @@ const els={
   restart:document.querySelector("#restart-test"),
   result:document.querySelector("#result-panel"),
   resultScore:document.querySelector("#result-score"),
-  resultDetail:document.querySelector("#result-detail")
+  resultDetail:document.querySelector("#result-detail"),
+  resultBest:document.querySelector("#result-best"),
+  progressBar:document.querySelector("#typing-progress-bar"),
+  retry:document.querySelector("#retry-test")
 };
 const state={duration:15,mode:"random",text:"",startedAt:0,elapsedBeforePause:0,running:false,paused:false,finished:false,raf:0,correct:0,errors:0};
 
@@ -85,6 +97,7 @@ function resetStats(){
   els.statusDot.classList.remove("is-live");
   els.surface.classList.remove("is-running");
   els.result.classList.remove("is-visible");
+  if(els.progressBar)els.progressBar.style.width="0%";
   els.input.value="";
   updateMetrics();
 }
@@ -100,6 +113,10 @@ function updateMetrics(){
   els.accuracy.textContent=m.accuracy.toFixed(m.accuracy===100?0:1)+"%";
   els.errors.textContent=String(state.errors);
   els.time.textContent=formatTime(Math.min(m.elapsed,state.duration*1000));
+  if(els.progressBar){
+    const typedRatio=state.text.length?Math.min(1,m.typed/state.text.length):0;
+    els.progressBar.style.width=(typedRatio*100).toFixed(2)+"%";
+  }
 }
 function setMode(mode){
   if(!TEST_TEXTS[mode]||state.running)return;
@@ -160,8 +177,13 @@ function finish(reason){
   updateMetrics();
   els.resultScore.textContent=Math.round(m.wpm)+" WPM";
   els.resultDetail.textContent=Math.round(m.wpm)+" WPM · "+m.accuracy.toFixed(1)+"% accuracy · "+state.errors+" errors · "+formatTime(state.elapsedBeforePause);
+  const session={wpm:Math.round(m.wpm),cpm:Math.round(m.cpm),accuracy:Number(m.accuracy.toFixed(1)),errors:state.errors,duration:state.duration,mode:state.mode,elapsed:state.elapsedBeforePause,createdAt:new Date().toISOString()};
+  saveSession(session);
+  if(els.resultBest){
+    els.resultBest.textContent="Personal best: "+getBestWpm()+" WPM";
+  }
   els.result.classList.add("is-visible");
-  saveSession({wpm:Math.round(m.wpm),cpm:Math.round(m.cpm),accuracy:Number(m.accuracy.toFixed(1)),errors:state.errors,duration:state.duration,mode:state.mode,elapsed:state.elapsedBeforePause,createdAt:new Date().toISOString()});
+Math.round(m.wpm),cpm:Math.round(m.cpm),accuracy:Number(m.accuracy.toFixed(1)),errors:state.errors,duration:state.duration,mode:state.mode,elapsed:state.elapsedBeforePause,createdAt:new Date().toISOString()});
 }
 function tick(){
   if(!state.running)return;
@@ -197,6 +219,15 @@ function scrollCurrentIntoView(index){
   const targetRect=target.getBoundingClientRect();
   if(targetRect.bottom>surfaceRect.bottom-44||targetRect.top<surfaceRect.top+38)target.scrollIntoView({block:"center",behavior:"auto"});
 }
+function getBestWpm(){
+  try{
+    const sessions=JSON.parse(localStorage.getItem(STORAGE_KEY)||"[]");
+    const values=Array.isArray(sessions)?sessions.map(item=>Number(item.wpm)).filter(Number.isFinite):[];
+    return Math.max(0,...values);
+  }catch(error){
+    return 0;
+  }
+}
 function saveSession(session){
   try{
     const previous=JSON.parse(localStorage.getItem(STORAGE_KEY)||"[]");
@@ -217,9 +248,15 @@ function wire(){
   });
   els.surface.addEventListener("click",focusInput);
   els.input.addEventListener("input",handleInput);
+  ["paste","drop"].forEach(type=>els.input.addEventListener(type,event=>event.preventDefault()));
   els.input.addEventListener("keydown",event=>{if(event.key==="Tab")event.preventDefault();});
   els.pause.addEventListener("click",togglePause);
   els.restart.addEventListener("click",()=>{loadTest();focusInput();});
+  els.retry?.addEventListener("click",()=>{loadTest();focusInput();});
+  document.addEventListener("keydown",event=>{
+    if(!state.finished)return;
+    if(event.key==="Enter"&&document.activeElement!==els.input){loadTest();focusInput();}
+  });
   document.addEventListener("visibilitychange",()=>{
     if(document.hidden&&state.running)togglePause();
   });
