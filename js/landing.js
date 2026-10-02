@@ -27,8 +27,6 @@ if(revealItems.length){
   }
 }
 
-const featureLink=document.querySelector('[href="#features"]');
-const workspaceLink=document.querySelector('[href="#workspace"]');
 const sections=[...document.querySelectorAll("main section[id]")];
 const navLinks=[...document.querySelectorAll(".navbar__link")];
 
@@ -37,7 +35,7 @@ if(sections.length && navLinks.length){
     const visible=entries.filter(entry=>entry.isIntersecting).sort((a,b)=>b.intersectionRatio-a.intersectionRatio)[0];
     if(!visible)return;
     navLinks.forEach(link=>{
-      const active=link.getAttribute("href")===`#${visible.target.id}`;
+      const active=link.getAttribute("href") === ("#" + (visible.target.id === "workspace" ? "top" : visible.target.id));
       link.classList.toggle("navbar__link--active",active);
       if(active)link.setAttribute("aria-current","page");else link.removeAttribute("aria-current");
     });
