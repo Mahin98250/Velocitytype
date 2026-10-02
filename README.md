@@ -5,6 +5,11 @@ Premium, offline-first typing speed platform built with HTML, CSS, Vanilla JavaS
 No React, Vue, Angular, backend, database, Firebase, Node.js, AI APIs, or paid APIs.
 
 ## Current implementation
+- Working 15/30/60/120-second typing tests
+- Random, quotes, and code text modes
+- Live WPM, CPM, accuracy, error, and timer metrics
+- Pause, resume, restart, completion state, and character feedback
+- Completed sessions stored in Local Storage
 - Semantic, responsive application shell
 - Dark-first premium design tokens and typography
 - Glassmorphism utility system
