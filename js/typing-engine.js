@@ -56,26 +56,34 @@ function getSettings(){
     return value&&typeof value==="object"?value:{};
   }catch(error){return {};}
 }
-function playKeySound(correct){
+function playTone(frequency,{duration=.055,wave="sine",level=.45,delay=0}={}){
+  const AudioCtor=window.AudioContext||window.webkitAudioContext;
+  if(!AudioCtor)return;
+  audioContext??=new AudioCtor();
+  if(audioContext.state==="suspended")audioContext.resume().catch(()=>{});
+  const now=audioContext.currentTime+delay,osc=audioContext.createOscillator(),gain=audioContext.createGain();
+  const volume=Math.min(.045,Math.max(.0001,Number(getSettings().volume??.18)*.12*level));
+  osc.type=wave;osc.frequency.setValueAtTime(frequency,now);
+  gain.gain.setValueAtTime(.0001,now);
+  gain.gain.exponentialRampToValueAtTime(volume,now+.006);
+  gain.gain.exponentialRampToValueAtTime(.0001,now+duration);
+  osc.connect(gain);gain.connect(audioContext.destination);
+  osc.start(now);osc.stop(now+duration+.01);
+}
+function playKeySound(correct,char=""){
   const settings=getSettings();
   if(!settings.sound)return;
   try{
-    const AudioCtor=window.AudioContext||window.webkitAudioContext;
-    if(!AudioCtor)return;
-    audioContext??=new AudioCtor();
-    if(audioContext.state==="suspended")audioContext.resume();
-    const osc=audioContext.createOscillator();
-    const gain=audioContext.createGain();
-    const volume=Math.min(.04,Math.max(.004,Number(settings.volume??.18)*.16));
-    osc.type="sine";
-    osc.frequency.value=correct?520:190;
-    gain.gain.setValueAtTime(.0001,audioContext.currentTime);
-    gain.gain.exponentialRampToValueAtTime(volume,audioContext.currentTime+.004);
-    gain.gain.exponentialRampToValueAtTime(.0001,audioContext.currentTime+.045);
-    osc.connect(gain);gain.connect(audioContext.destination);
-    osc.start();osc.stop(audioContext.currentTime+.05);
+    const pitch=correct?420+(char.charCodeAt(0)%7)*22:175;
+    playTone(pitch,{duration:correct?.045:.085,wave:correct?"sine":"triangle",level:correct?.65:1});
   }catch(error){}
 }
+function playFinishSound(){
+  if(!getSettings().sound)return;
+  try{[660,830,990].forEach((frequency,index)=>playTone(frequency,{duration:.16,level:.8,delay:index*.085}));}catch(error){}
+}
+window.addEventListener("velocitytype:preview-sound",()=>{try{playTone(560,{duration:.07,level:1});playTone(760,{duration:.11,level:.8,delay:.09});}catch(error){}});
+
 function pickText(mode){
   const list=TEST_TEXTS[mode]||TEST_TEXTS.random;
   return list[Math.floor(Math.random()*list.length)];
@@ -184,6 +192,7 @@ function saveSession(session){
 }
 function finish(reason){
   const m=metrics();
+  playFinishSound();
   state.elapsedBeforePause=Math.min(m.elapsed,state.duration*1000);
   state.running=false;state.finished=true;state.paused=false;
   if(state.raf)cancelAnimationFrame(state.raf);
@@ -226,7 +235,7 @@ function handleInput(){
   state.correct=correct;state.errors=errors;
   if(grew){
     const index=value.length-1;
-    playKeySound(value[index]===state.text[index]);
+    playKeySound(value[index]===state.text[index],value[index]);
   }
   state.lastValueLength=value.length;
   updateMetrics();
