@@ -62,8 +62,13 @@ function playTone(frequency,{duration=.055,wave="sine",level=.45,delay=0}={}){
   audioContext??=new AudioCtor();
   if(audioContext.state==="suspended")audioContext.resume().catch(()=>{});
   const now=audioContext.currentTime+delay,osc=audioContext.createOscillator(),gain=audioContext.createGain();
-  const volume=Math.min(.045,Math.max(.0001,Number(getSettings().volume??.18)*.12*level));
-  osc.type=wave;osc.frequency.setValueAtTime(frequency,now);
+  const soundSettings=getSettings();
+  const style=soundSettings.soundStyle||"soft";
+  const profiles={soft:{wave:"sine",durationScale:.82,volumeScale:.8,frequencyScale:1},crisp:{wave:"triangle",durationScale:.72,volumeScale:.95,frequencyScale:1.16},mechanical:{wave:"square",durationScale:.52,volumeScale:.48,frequencyScale:.72}};
+  const profile=profiles[style]||profiles.soft;
+  const volume=Math.min(.045,Math.max(.0001,Number(soundSettings.volume??.18)*.12*level*profile.volumeScale));
+  duration*=profile.durationScale;
+  osc.type=profile.wave||wave;osc.frequency.setValueAtTime(frequency*profile.frequencyScale,now);
   gain.gain.setValueAtTime(.0001,now);
   gain.gain.exponentialRampToValueAtTime(volume,now+.006);
   gain.gain.exponentialRampToValueAtTime(.0001,now+duration);
