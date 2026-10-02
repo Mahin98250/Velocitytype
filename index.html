@@ -5,13 +5,13 @@
 <meta name="theme-color" content="#08090d"><meta name="color-scheme" content="dark">
 <title>VelocityType — Typing, refined.</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="css/reset.css"><link rel="stylesheet" href="css/variables.css"><link rel="stylesheet" href="css/typography.css"><link rel="stylesheet" href="css/layout.css"><link rel="stylesheet" href="css/navbar.css"><link rel="stylesheet" href="css/footer.css"><link rel="stylesheet" href="css/utilities.css"><link rel="stylesheet" href="css/landing.css">
+<link rel="stylesheet" href="css/reset.css"><link rel="stylesheet" href="css/variables.css"><link rel="stylesheet" href="css/typography.css"><link rel="stylesheet" href="css/layout.css"><link rel="stylesheet" href="css/navbar.css"><link rel="stylesheet" href="css/footer.css"><link rel="stylesheet" href="css/utilities.css"><link rel="stylesheet" href="css/landing.css"><link rel="stylesheet" href="css/typing.css">
 </head><body>
 <div class="loading-screen" id="loading-screen" aria-hidden="true"><div class="loading-screen__mark">V<span>.</span></div><span class="loading-screen__label">Preparing your workspace</span><span class="loading-screen__track"><span></span></span></div>
 <div class="landing-bg" aria-hidden="true"><div class="landing-grid"></div><span class="landing-orb landing-orb--one"></span><span class="landing-orb landing-orb--two"></span><span class="landing-orb landing-orb--three"></span></div>
 <div id="app" class="app-shell"><header class="site-header"><nav class="navbar container" aria-label="Main navigation">
 <a class="brand" href="#top" aria-label="VelocityType home"><span class="brand__mark" aria-hidden="true">V</span><span class="brand__name">velocity<span>type</span></span></a>
-<div class="navbar__links"><a class="navbar__link navbar__link--active" href="#top">Overview</a><a class="navbar__link" href="#features">Features</a><a class="navbar__link" href="#principles">Principles</a></div>
+<div class="navbar__links"><a class="navbar__link navbar__link--active" href="#top">Overview</a><a class="navbar__link" href="#practice">Practice</a><a class="navbar__link" href="#features">Features</a><a class="navbar__link" href="#principles">Principles</a></div>
 <a class="button button--small button--primary" href="#workspace">Open workspace <span aria-hidden="true">↗</span></a></nav></header>
 <main id="top" class="app-main">
 <section id="workspace" class="hero container">
@@ -19,7 +19,7 @@
 <div class="hero-copy reveal"><span class="hero-badge"><span class="status-dot"></span> Offline-first • zero accounts required</span>
 <h1>Typing should feel <span class="text-gradient">effortless.</span></h1>
 <p>A focused typing environment built around speed, accuracy, rhythm, and progress — with your practice history staying on your device.</p>
-<div class="hero-actions"><a class="button button--primary" href="#features">Explore VelocityType <span aria-hidden="true">↓</span></a><a class="button button--ghost" href="#principles">See how it works</a></div>
+<div class="hero-actions"><a class="button button--primary" href="#practice">Start a 15s test <span aria-hidden="true">↓</span></a><a class="button button--ghost" href="#principles">See how it works</a></div>
 <div class="hero-proof"><span class="hero-proof__item"><strong>15–120s</strong> test lengths</span><span class="hero-proof__item"><strong>Local-first</strong> progress</span><span class="hero-proof__item"><strong>Vanilla JS</strong> engine</span></div></div>
 <div class="preview-wrap reveal" style="transition-delay:90ms">
 <div class="typing-preview" aria-label="VelocityType typing preview">
@@ -35,6 +35,18 @@
 <article class="bento-card bento-card--tall glass-panel reveal" style="transition-delay:110ms"><span class="bento-card__eyebrow">Local-first</span><h3>Your history stays close.</h3><p>No account, no required server, no paid API. The product is designed to work from a static deployment and keep practice data in Local Storage.</p><div class="bento-card__visual" aria-hidden="true"></div></article>
 <article class="bento-card bento-card--tall glass-panel reveal" style="transition-delay:150ms"><span class="bento-card__eyebrow">Control</span><h3>Make the workspace yours.</h3><p>Theme, font, cursor, sound, animation, layout, import, export, and reset are part of the planned native settings layer.</p><div class="bento-card__visual" aria-hidden="true"></div></article></div></section>
 <section id="principles" class="section container"><div class="section-heading reveal"><span class="eyebrow">Built in layers</span><h2>One calm system, assembled piece by piece.</h2></div><div class="principles"><article class="principle glass-panel reveal"><span class="principle__number">01</span><h3>Engine first</h3><p>The typing loop will be deterministic, responsive, and independently testable.</p></article><article class="principle glass-panel reveal" style="transition-delay:70ms"><span class="principle__number">02</span><h3>Data second</h3><p>Completed runs become structured local records that power history and charts.</p></article><article class="principle glass-panel reveal" style="transition-delay:140ms"><span class="principle__number">03</span><h3>Polish last — but deeply</h3><p>Accessibility, performance, motion, responsive behavior, and visual detail get their own QA pass.</p></article></div></section>
-</main>
+<section id="practice" class="practice-shell"><div class="container">
+<div class="practice-header reveal"><div><span class="eyebrow">Typing lab</span><h2>Make the next keystroke count.</h2></div><p>Start with 15 seconds, find your rhythm, and watch the metrics respond in real time. Every completed run is stored locally on this device.</p></div>
+<div class="practice-card glass-panel reveal" style="transition-delay:80ms">
+<div class="practice-toolbar">
+<div id="duration-controls" class="segmented" aria-label="Test duration"><button type="button" data-duration="15" class="is-active">15s</button><button type="button" data-duration="30">30s</button><button type="button" data-duration="60">60s</button><button type="button" data-duration="120">120s</button></div>
+<div id="mode-controls" class="segmented" aria-label="Text mode"><button type="button" data-mode="random" class="is-active">Random</button><button type="button" data-mode="quotes">Quotes</button><button type="button" data-mode="code">Code</button></div>
+<div class="practice-actions"><button id="pause-test" class="icon-button" type="button" disabled aria-label="Pause typing test">Ⅱ</button><button id="restart-test" class="icon-button" type="button" aria-label="Restart typing test">↻</button></div>
+</div>
+<div class="practice-stats" aria-live="polite"><div class="live-stat"><div class="live-stat__label">WPM</div><div id="live-wpm" class="live-stat__value numeric">0</div></div><div class="live-stat"><div class="live-stat__label">CPM</div><div id="live-cpm" class="live-stat__value numeric">0</div></div><div class="live-stat"><div class="live-stat__label">Accuracy</div><div id="live-accuracy" class="live-stat__value numeric">100%</div></div><div class="live-stat"><div class="live-stat__label">Errors</div><div id="live-errors" class="live-stat__value numeric">0</div></div></div>
+<div id="typing-surface" class="typing-surface" role="application" aria-label="Typing test input area"><div id="typing-copy" class="typing-copy" aria-label="Text to type"></div><textarea id="typing-input" class="typing-input" aria-label="Type the text shown above" autocapitalize="off" autocomplete="off" autocorrect="off" spellcheck="false"></textarea><div class="typing-hint">Click the text area and type · <kbd>Tab</kbd> is reserved for controls</div></div>
+<div class="practice-status"><span class="practice-status__message"><span id="practice-status-dot" class="practice-status__dot"></span><span id="practice-status">Ready — start typing to begin</span></span><span class="numeric">Time <strong id="live-time">00:00</strong></span></div>
+<div id="result-panel" class="result-panel" aria-live="polite"><div class="result-panel__top"><div><span class="eyebrow">Session complete</span><h3>Your run is recorded locally.</h3><p id="result-detail" class="result-detail">—</p></div><div id="result-score" class="result-score numeric">0 WPM</div></div></div>
+</div></div></section></main>
 <footer id="footer" class="site-footer"><div class="container site-footer__inner"><a class="brand brand--footer" href="#top"><span class="brand__mark" aria-hidden="true">V</span><span class="brand__name">velocity<span>type</span></span></a><p>Made for the momentum of getting better.</p><span class="site-footer__copyright">© <span id="copyright-year">2026</span> VelocityType</span></div></footer></div>
-<script type="module" src="js/app.js"></script><script type="module" src="js/landing.js"></script></body></html>
+<script type="module" src="js/app.js"></script><script type="module" src="js/landing.js"></script><script type="module" src="js/typing-engine.js"></script></body></html>
