@@ -29,6 +29,7 @@ if(revealItems.length){
 
 const sections=[...document.querySelectorAll("main section[id]")];
 const navLinks=[...document.querySelectorAll(".navbar__link")];
+const mobileNav=[...document.querySelectorAll("[data-mobile-nav]")];
 
 if(sections.length && navLinks.length){
   const sectionObserver=new IntersectionObserver(entries=>{
