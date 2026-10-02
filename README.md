@@ -9,7 +9,8 @@ No React, Vue, Angular, backend, database, Firebase, Node.js, AI APIs, or paid A
 - Random, quotes, code, numbers, symbols, and mixed text modes
 - Live WPM, CPM, accuracy, error, and timer metrics
 - Pause, resume, restart, completion state, and character feedback
-- Completed sessions stored in Local Storage\n- Local progress dashboard with personal best, session count, average accuracy, and recent runs
+- Completed sessions stored in Local Storage
+- Local progress dashboard with personal best, session count, average accuracy, and recent runs
 - Weekly average-WPM chart and practice-pattern insight, rendered locally
 - Workspace personalization and local history import/export
 - PWA manifest and static service-worker cache foundation
