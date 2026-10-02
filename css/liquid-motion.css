@@ -260,3 +260,7 @@ html{scroll-behavior:smooth}
 }
 [data-force-reduced-motion="true"] .button--primary:after{transition:none}
 [data-force-reduced-motion="true"] .preview-stat,[data-force-reduced-motion="true"] .live-stat,[data-force-reduced-motion="true"] .mobile-dock__item{transition:none}
+
+@media(hover:hover) and (pointer:fine){
+  .mobile-dock__item:hover{color:var(--color-text);background:rgba(255,255,255,.055);transform:translateY(-1px)}
+}
