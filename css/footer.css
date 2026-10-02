@@ -1,0 +1,6 @@
+/* VelocityType footer */
+.site-footer{border-top:1px solid rgba(255,255,255,.055);background:rgba(8,9,13,.36)}
+.site-footer__inner{display:flex;min-height:86px;align-items:center;justify-content:space-between;gap:var(--space-4);padding-block:var(--space-4)}
+.brand--footer .brand__mark{width:28px;height:28px;border-radius:9px;font-size:1rem}.brand--footer .brand__name{font-size:.9rem}
+.site-footer__inner p,.site-footer__copyright{color:var(--color-text-subtle);font-size:var(--font-size-xs)}
+@media(max-width:620px){.site-footer__inner{flex-wrap:wrap;justify-content:center;text-align:center}.site-footer__inner p{order:3;width:100%}}
