@@ -1,0 +1,12 @@
+/* Reusable foundation utilities */
+.glass-panel{border:1px solid var(--color-border);background:linear-gradient(145deg,rgba(255,255,255,.065),rgba(255,255,255,.022));box-shadow:var(--shadow-md);backdrop-filter:blur(var(--blur-lg));-webkit-backdrop-filter:blur(var(--blur-lg))}
+.button{display:inline-flex;min-height:48px;align-items:center;justify-content:center;gap:10px;padding:0 20px;border:1px solid transparent;border-radius:var(--radius-pill);font-size:var(--font-size-sm);font-weight:var(--font-weight-semibold);transition:transform var(--duration-fast) var(--ease-standard),background var(--duration-fast) var(--ease-standard),box-shadow var(--duration-fast) var(--ease-standard)}
+.button:hover{transform:translateY(-2px)}.button:active{transform:scale(.98)}.button--primary{background:linear-gradient(110deg,#a5b0ff,#7e91ff);box-shadow:0 8px 26px rgba(124,140,255,.2);color:#08090d}.button--primary:hover{box-shadow:0 12px 34px rgba(124,140,255,.32)}.button--small{min-height:38px;padding-inline:15px;font-size:var(--font-size-xs)}
+.status-dot{width:7px;height:7px;border-radius:50%;background:var(--color-success);box-shadow:0 0 12px rgba(88,214,141,.65)}
+.visually-hidden{position:absolute!important;width:1px!important;height:1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;clip-path:inset(50%)!important}
+.loading-screen{position:fixed;z-index:100;inset:0;display:grid;align-content:center;justify-items:center;gap:12px;background:var(--color-bg);opacity:1;visibility:visible;transition:opacity 380ms ease,visibility 380ms ease}
+.loading-screen.is-hidden{opacity:0;visibility:hidden;pointer-events:none}.loading-screen__mark{color:var(--color-text);font-family:var(--font-display);font-size:3rem;font-weight:700;letter-spacing:-.08em}.loading-screen__mark span{color:var(--color-primary)}
+.loading-screen__label{color:var(--color-text-subtle);font-size:var(--font-size-xs);letter-spacing:.1em}.loading-screen__track{width:100px;height:2px;overflow:hidden;border-radius:4px;background:var(--color-border)}
+.loading-screen__track span{display:block;width:45%;height:100%;border-radius:inherit;background:var(--color-primary);animation:loading-sweep 900ms ease-in-out infinite alternate}
+@keyframes loading-sweep{from{transform:translateX(-20%)}to{transform:translateX(145%)}}
+@media(prefers-reduced-motion:reduce){.loading-screen__track span{animation:none;width:100%}}
