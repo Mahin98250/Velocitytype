@@ -31,7 +31,7 @@ const sections=[...document.querySelectorAll("main section[id]")];
 const navLinks=[...document.querySelectorAll(".navbar__link")];
 const mobileNav=[...document.querySelectorAll("[data-mobile-nav]")];
 
-if(sections.length && navLinks.length){
+if(sections.length && (navLinks.length || mobileNav.length)){
   const sectionObserver=new IntersectionObserver(entries=>{
     const visible=entries.filter(entry=>entry.isIntersecting).sort((a,b)=>b.intersectionRatio-a.intersectionRatio)[0];
     if(!visible)return;
@@ -40,7 +40,13 @@ if(sections.length && navLinks.length){
       link.classList.toggle("navbar__link--active",active);
       if(active)link.setAttribute("aria-current","page");else link.removeAttribute("aria-current");
     });
-  },{threshold:[.2,.45,.7],rootMargin:"-20% 0px -55% 0px"});
+    const activeId=visible.target.id === "workspace" ? "top" : visible.target.id;
+    mobileNav.forEach(link=>{
+      const active=link.dataset.mobileNav===activeId;
+      link.classList.toggle("is-active",active);
+      if(active)link.setAttribute("aria-current","page");else link.removeAttribute("aria-current");
+    });
+x"});
   sections.forEach(section=>sectionObserver.observe(section));
 }
 
