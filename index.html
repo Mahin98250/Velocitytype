@@ -1,37 +1,24 @@
 <!doctype html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
-    />
-    <meta
-      name="description"
-      content="VelocityType — a premium typing speed platform built for focused practice and measurable progress."
-    />
-    <meta name="theme-color" content="#08090d" />
-    <title>VelocityType</title>
-
-    <link rel="stylesheet" href="css/reset.css" />
-    <link rel="stylesheet" href="css/variables.css" />
-    <link rel="stylesheet" href="css/layout.css" />
-  </head>
-
-  <body>
-    <div id="app" class="app-shell">
-      <main class="app-main">
-        <section class="app-placeholder" aria-labelledby="app-title">
-          <span class="app-placeholder__eyebrow">FOUNDATION READY</span>
-          <h1 id="app-title">VelocityType</h1>
-          <p>
-            Your premium typing workspace is being assembled one focused
-            module at a time.
-          </p>
-        </section>
-      </main>
-    </div>
-
-    <script type="module" src="js/app.js"></script>
-  </body>
-</html>
+<html lang="en"><head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="VelocityType — a premium typing speed platform built for focused practice and measurable progress."><meta name="theme-color" content="#08090d">
+<title>VelocityType — Find Your Flow</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="css/reset.css"><link rel="stylesheet" href="css/variables.css"><link rel="stylesheet" href="css/typography.css"><link rel="stylesheet" href="css/layout.css"><link rel="stylesheet" href="css/navbar.css"><link rel="stylesheet" href="css/footer.css"><link rel="stylesheet" href="css/utilities.css">
+</head><body>
+<div class="loading-screen" id="loading-screen" aria-hidden="true"><div class="loading-screen__mark">V<span>.</span></div><span class="loading-screen__label">Preparing your workspace</span><span class="loading-screen__track"><span></span></span></div>
+<div id="app" class="app-shell"><header class="site-header"><nav class="navbar container" aria-label="Main navigation">
+<a class="brand" href="#top" aria-label="VelocityType home"><span class="brand__mark" aria-hidden="true">V</span><span class="brand__name">velocity<span>type</span></span></a>
+<div class="navbar__links"><a class="navbar__link navbar__link--active" href="#top" aria-current="page">Overview</a><a class="navbar__link" href="#features">Features</a><a class="navbar__link" href="#footer">About</a></div>
+<a class="button button--small button--primary" href="#workspace">Get started <span aria-hidden="true">↗</span></a></nav></header>
+<main id="top" class="app-main"><section id="workspace" class="app-placeholder glass-panel" aria-labelledby="app-title">
+<span class="app-placeholder__eyebrow"><span class="status-dot"></span> YOUR SPACE TO IMPROVE</span><h1 id="app-title">Find your <span class="text-gradient">flow.</span></h1>
+<p>Build speed, sharpen accuracy, and turn every keystroke into progress. Your premium typing workspace is taking shape.</p>
+<a class="button button--primary app-placeholder__cta" href="#features">Explore the experience <span aria-hidden="true">↓</span></a><div class="foundation-note"><span class="foundation-note__icon" aria-hidden="true">✦</span> Thoughtfully built for focused practice.</div>
+</section><section id="features" class="foundation-features container" aria-label="Platform principles">
+<article class="feature-tile glass-panel"><span class="feature-tile__icon" aria-hidden="true">⌁</span><h2>Find your rhythm</h2><p>A calm, distraction-aware space designed to keep your attention on the words.</p></article>
+<article class="feature-tile glass-panel"><span class="feature-tile__icon" aria-hidden="true">↗</span><h2>Track your progress</h2><p>A foundation for meaningful insights as your practice history grows.</p></article>
+<article class="feature-tile glass-panel"><span class="feature-tile__icon" aria-hidden="true">◈</span><h2>Your data stays yours</h2><p>Designed around local-first storage, without accounts or a required backend.</p></article>
+</section></main>
+<footer id="footer" class="site-footer"><div class="container site-footer__inner"><a class="brand brand--footer" href="#top"><span class="brand__mark" aria-hidden="true">V</span><span class="brand__name">velocity<span>type</span></span></a><p>Made for the momentum of getting better.</p><span class="site-footer__copyright">© <span id="copyright-year">2026</span> VelocityType</span></div></footer></div>
+<script type="module" src="js/app.js"></script></body></html>
