@@ -290,3 +290,21 @@ button,a,label,.mobile-dock__item,.navbar__link{-webkit-user-select:none;user-se
 /* Distinct app views: keep each navigation destination on its own screen. */
 html.js-pages [data-page][hidden]{display:none!important}
 html.js-pages [data-page]:not([hidden]){content-visibility:visible}
+
+
+/* Programmer profile and selected project showcase */
+.projects-heading{display:flex;align-items:end;justify-content:space-between;gap:1rem;max-width:1040px;margin:clamp(2.6rem,6vw,4.2rem) auto 1.15rem}
+.projects-heading h3{margin:.45rem 0 .35rem;font-size:clamp(1.35rem,3vw,1.8rem);letter-spacing:-.04em;color:var(--color-text)}
+.projects-heading p{margin:0;color:var(--color-text-muted);font-size:.84rem;line-height:1.65}
+.projects-all-link{flex:0 0 auto;color:var(--color-primary);font-size:.78rem;font-weight:650;text-decoration:none}
+.projects-all-link:hover,.project-card:hover .project-card__link{text-decoration:underline;text-underline-offset:3px}
+.projects-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.85rem;max-width:1040px;margin-inline:auto}
+.project-card{position:relative;display:flex;min-width:0;min-height:208px;flex-direction:column;align-items:flex-start;padding:1.15rem;border:1px solid rgba(255,255,255,.1);border-radius:19px;background:linear-gradient(145deg,rgba(255,255,255,.065),rgba(255,255,255,.025));box-shadow:inset 0 1px rgba(255,255,255,.06);text-decoration:none;transition:transform .22s ease,border-color .22s ease,background .22s ease}
+.project-card:hover{transform:translateY(-3px);border-color:rgba(154,168,255,.35);background:linear-gradient(145deg,rgba(154,168,255,.1),rgba(255,255,255,.035))}
+.project-card__index{color:var(--color-text-subtle);font-size:.58rem;font-weight:700;letter-spacing:.1em}
+.project-card__icon{display:grid;width:35px;height:35px;place-items:center;margin:.9rem 0 .6rem;border:1px solid rgba(255,255,255,.1);border-radius:11px;background:rgba(255,255,255,.055);color:var(--color-primary);font-size:1.15rem}
+.project-card h4{margin:0 0 .35rem;color:var(--color-text);font-size:.94rem;font-weight:700;letter-spacing:-.02em}
+.project-card p{margin:0 0 1rem;color:var(--color-text-muted);font-size:.72rem;line-height:1.65}
+.project-card__link{margin-top:auto;color:var(--color-primary);font-size:.68rem;font-weight:650}
+@media(max-width:800px){.projects-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:520px){.projects-heading{align-items:flex-start;flex-direction:column;gap:.65rem}.projects-grid{grid-template-columns:1fr;gap:.65rem}.project-card{min-height:175px;padding:1rem}.project-card__icon{margin:.65rem 0 .45rem}}
