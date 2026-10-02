@@ -20,7 +20,7 @@ const TEST_TEXTS={
     "! @ # $ % ^ & * ( ) _ + = - [ ] { } ; : , . ? / < > ~ |"
   ],
   mixed:[
-    "VelocityType v0.3 — practice at 120 WPM, keep accuracy above 98%, and let 2026-10-02 mark another focused session."
+    "VelocityType v0.3 — practice at 120 WPM, keep accuracy above 98%, and make another focused session count."
   ]
 };
 const DURATIONS=[15,30,60,120];
@@ -47,17 +47,42 @@ const els={
   progressBar:document.querySelector("#typing-progress-bar"),
   retry:document.querySelector("#retry-test")
 };
-const state={duration:15,mode:"random",text:"",startedAt:0,elapsedBeforePause:0,running:false,paused:false,finished:false,raf:0,correct:0,errors:0};
+const state={duration:15,mode:"random",text:"",startedAt:0,elapsedBeforePause:0,running:false,paused:false,finished:false,raf:0,correct:0,errors:0,lastValueLength:0};
+let audioContext=null;
 
+function getSettings(){
+  try{
+    const value=JSON.parse(localStorage.getItem("velocitytype.settings.v1")||"{}");
+    return value&&typeof value==="object"?value:{};
+  }catch(error){return {};}
+}
+function playKeySound(correct){
+  const settings=getSettings();
+  if(!settings.sound)return;
+  try{
+    const AudioCtor=window.AudioContext||window.webkitAudioContext;
+    if(!AudioCtor)return;
+    audioContext??=new AudioCtor();
+    if(audioContext.state==="suspended")audioContext.resume();
+    const osc=audioContext.createOscillator();
+    const gain=audioContext.createGain();
+    const volume=Math.min(.04,Math.max(.004,Number(settings.volume??.18)*.16));
+    osc.type="sine";
+    osc.frequency.value=correct?520:190;
+    gain.gain.setValueAtTime(.0001,audioContext.currentTime);
+    gain.gain.exponentialRampToValueAtTime(volume,audioContext.currentTime+.004);
+    gain.gain.exponentialRampToValueAtTime(.0001,audioContext.currentTime+.045);
+    osc.connect(gain);gain.connect(audioContext.destination);
+    osc.start();osc.stop(audioContext.currentTime+.05);
+  }catch(error){}
+}
 function pickText(mode){
   const list=TEST_TEXTS[mode]||TEST_TEXTS.random;
   return list[Math.floor(Math.random()*list.length)];
 }
 function formatTime(ms){
-  const total=Math.max(0,Math.ceil(ms/1000));
-  const mins=Math.floor(total/60);
-  const secs=total%60;
-  return String(mins).padStart(2,"0")+":"+String(secs).padStart(2,"0");
+  const total=Math.max(0,Math.floor(ms/1000));
+  return String(Math.floor(total/60)).padStart(2,"0")+":"+String(total%60).padStart(2,"0");
 }
 function elapsedMs(){
   if(!state.running)return state.elapsedBeforePause;
@@ -67,13 +92,7 @@ function metrics(){
   const elapsed=elapsedMs();
   const minutes=Math.max(elapsed/60000,1/60000);
   const typed=state.correct+state.errors;
-  return {
-    elapsed:elapsed,
-    wpm:(state.correct/5)/minutes,
-    cpm:state.correct/minutes,
-    accuracy:typed?state.correct/typed*100:100,
-    typed:typed
-  };
+  return {elapsed,wpm:(state.correct/5)/minutes,cpm:state.correct/minutes,accuracy:typed?state.correct/typed*100:100,typed};
 }
 function renderText(){
   els.copy.textContent="";
@@ -89,13 +108,11 @@ function renderText(){
 }
 function resetStats(){
   state.correct=0;state.errors=0;state.startedAt=0;state.elapsedBeforePause=0;
-  state.running=false;state.paused=false;state.finished=false;
+  state.running=false;state.paused=false;state.finished=false;state.lastValueLength=0;
   if(state.raf)cancelAnimationFrame(state.raf);
-  els.pause.textContent="Pause";
-  els.pause.disabled=true;
+  els.pause.textContent="Pause";els.pause.disabled=true;
   els.status.textContent="Ready — start typing to begin";
-  els.statusDot.classList.remove("is-live");
-  els.surface.classList.remove("is-running");
+  els.statusDot.classList.remove("is-live");els.surface.classList.remove("is-running");
   els.result.classList.remove("is-visible");
   if(els.progressBar)els.progressBar.style.width="0%";
   els.input.value="";
@@ -103,8 +120,7 @@ function resetStats(){
 }
 function loadTest(){
   state.text=pickText(state.mode);
-  renderText();
-  resetStats();
+  renderText();resetStats();
 }
 function updateMetrics(){
   const m=metrics();
@@ -114,8 +130,8 @@ function updateMetrics(){
   els.errors.textContent=String(state.errors);
   els.time.textContent=formatTime(Math.min(m.elapsed,state.duration*1000));
   if(els.progressBar){
-    const typedRatio=state.text.length?Math.min(1,m.typed/state.text.length):0;
-    els.progressBar.style.width=(typedRatio*100).toFixed(2)+"%";
+    const ratio=state.text.length?Math.min(1,m.typed/state.text.length):0;
+    els.progressBar.style.width=(ratio*100).toFixed(2)+"%";
   }
 }
 function setMode(mode){
@@ -133,38 +149,38 @@ function setDuration(duration){
 }
 function focusInput(){els.input.focus({preventScroll:true});}
 function begin(){
-  if(state.finished)return;
-  if(!state.running){
-    state.startedAt=performance.now();
-    state.running=true;
-    state.paused=false;
-    els.pause.disabled=false;
-    els.status.textContent="Live — keep your rhythm";
-    els.statusDot.classList.add("is-live");
-    els.surface.classList.add("is-running");
-    tick();
-  }
+  if(state.finished||state.running)return;
+  state.startedAt=performance.now();state.running=true;state.paused=false;
+  els.pause.disabled=false;els.status.textContent="Live — keep your rhythm";
+  els.statusDot.classList.add("is-live");els.surface.classList.add("is-running");
+  tick();
 }
 function togglePause(){
   if(!state.running&&!state.paused)return;
   if(state.running){
-    state.elapsedBeforePause=elapsedMs();
-    state.running=false;
-    state.paused=true;
-    els.pause.textContent="Resume";
-    els.status.textContent="Paused";
-    els.statusDot.classList.remove("is-live");
+    state.elapsedBeforePause=elapsedMs();state.running=false;state.paused=true;
+    els.pause.textContent="Resume";els.status.textContent="Paused";els.statusDot.classList.remove("is-live");
     if(state.raf)cancelAnimationFrame(state.raf);
   }else{
-    state.startedAt=performance.now();
-    state.running=true;
-    state.paused=false;
-    els.pause.textContent="Pause";
-    els.status.textContent="Live — keep your rhythm";
-    els.statusDot.classList.add("is-live");
-    tick();
+    state.startedAt=performance.now();state.running=true;state.paused=false;
+    els.pause.textContent="Pause";els.status.textContent="Live — keep your rhythm";els.statusDot.classList.add("is-live");tick();
   }
   focusInput();
+}
+function getBestWpm(){
+  try{
+    const sessions=JSON.parse(localStorage.getItem(STORAGE_KEY)||"[]");
+    const values=Array.isArray(sessions)?sessions.map(item=>Number(item.wpm)).filter(Number.isFinite):[];
+    return Math.max(0,...values);
+  }catch(error){return 0;}
+}
+function saveSession(session){
+  try{
+    const previous=JSON.parse(localStorage.getItem(STORAGE_KEY)||"[]");
+    const clean=Array.isArray(previous)?previous.slice(-49):[];
+    clean.push(session);
+    localStorage.setItem(STORAGE_KEY,JSON.stringify(clean));
+  }catch(error){console.warn("VelocityType: session history could not be saved.",error);}
 }
 function finish(reason){
   const m=metrics();
@@ -175,16 +191,14 @@ function finish(reason){
   els.status.textContent=reason==="Complete"?"Complete — test finished":"Time — test finished";
   els.statusDot.classList.remove("is-live");els.surface.classList.remove("is-running");
   updateMetrics();
-  els.resultScore.textContent=Math.round(m.wpm)+" WPM";
-  els.resultDetail.textContent=Math.round(m.wpm)+" WPM · "+m.accuracy.toFixed(1)+"% accuracy · "+state.errors+" errors · "+formatTime(state.elapsedBeforePause);
-  const session={wpm:Math.round(m.wpm),cpm:Math.round(m.cpm),accuracy:Number(m.accuracy.toFixed(1)),errors:state.errors,duration:state.duration,mode:state.mode,elapsed:state.elapsedBeforePause,createdAt:new Date().toISOString()};
+  const score=Math.round(m.wpm);
+  els.resultScore.textContent=score+" WPM";
+  els.resultDetail.textContent=score+" WPM · "+m.accuracy.toFixed(1)+"% accuracy · "+state.errors+" errors · "+formatTime(state.elapsedBeforePause);
+  const session={wpm:score,cpm:Math.round(m.cpm),accuracy:Number(m.accuracy.toFixed(1)),errors:state.errors,duration:state.duration,mode:state.mode,elapsed:state.elapsedBeforePause,createdAt:new Date().toISOString()};
   saveSession(session);
   window.dispatchEvent(new CustomEvent("velocitytype:session-complete",{detail:session}));
-  if(els.resultBest){
-    els.resultBest.textContent="Personal best: "+getBestWpm()+" WPM";
-  }
+  if(els.resultBest)els.resultBest.textContent="Personal best: "+getBestWpm()+" WPM";
   els.result.classList.add("is-visible");
-Math.round(m.wpm),cpm:Math.round(m.cpm),accuracy:Number(m.accuracy.toFixed(1)),errors:state.errors,duration:state.duration,mode:state.mode,elapsed:state.elapsedBeforePause,createdAt:new Date().toISOString()});
 }
 function tick(){
   if(!state.running)return;
@@ -196,6 +210,7 @@ function handleInput(){
   if(state.finished)return;
   const value=els.input.value.slice(0,state.text.length);
   if(value.length>0&&!state.running&&!state.paused)begin();
+  const grew=value.length>state.lastValueLength;
   const spans=els.copy.querySelectorAll(".char");
   let correct=0,errors=0;
   spans.forEach((span,index)=>{
@@ -209,6 +224,11 @@ function handleInput(){
     if(isIncorrect)errors++;
   });
   state.correct=correct;state.errors=errors;
+  if(grew){
+    const index=value.length-1;
+    playKeySound(value[index]===state.text[index]);
+  }
+  state.lastValueLength=value.length;
   updateMetrics();
   if(value.length>=state.text.length){finish("Complete");return;}
   if(value.length)scrollCurrentIntoView(value.length);
@@ -216,26 +236,8 @@ function handleInput(){
 function scrollCurrentIntoView(index){
   const target=els.copy.querySelector('[data-index="'+Math.min(index,state.text.length-1)+'"]');
   if(!target)return;
-  const surfaceRect=els.surface.getBoundingClientRect();
-  const targetRect=target.getBoundingClientRect();
+  const surfaceRect=els.surface.getBoundingClientRect(),targetRect=target.getBoundingClientRect();
   if(targetRect.bottom>surfaceRect.bottom-44||targetRect.top<surfaceRect.top+38)target.scrollIntoView({block:"center",behavior:"auto"});
-}
-function getBestWpm(){
-  try{
-    const sessions=JSON.parse(localStorage.getItem(STORAGE_KEY)||"[]");
-    const values=Array.isArray(sessions)?sessions.map(item=>Number(item.wpm)).filter(Number.isFinite):[];
-    return Math.max(0,...values);
-  }catch(error){
-    return 0;
-  }
-}
-function saveSession(session){
-  try{
-    const previous=JSON.parse(localStorage.getItem(STORAGE_KEY)||"[]");
-    const clean=Array.isArray(previous)?previous.slice(-49):[];
-    clean.push(session);
-    localStorage.setItem(STORAGE_KEY,JSON.stringify(clean));
-  }catch(error){console.warn("VelocityType: session history could not be saved.",error);}
 }
 function wire(){
   if(!els.input||!els.copy)return;
