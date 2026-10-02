@@ -1,6 +1,6 @@
 /* VelocityType settings, history import/export, and local personalization. */
 const SETTINGS_KEY="velocitytype.settings.v1";
-const DEFAULTS={theme:"dark",font:"system",cursor:"line",compact:false,sound:false,volume:.18,reduceMotion:false};
+const DEFAULTS={theme:"dark",font:"system",cursor:"line",compact:false,sound:false,volume:.18,soundStyle:"soft",reduceMotion:false};
 const root=document.documentElement;
 const modal=document.querySelector("#settings-modal");
 const form=document.querySelector("#settings-form");
@@ -32,11 +32,12 @@ function syncForm(settings){
   form.elements.compact.checked=!!settings.compact;
   form.elements.sound.checked=!!settings.sound;
   form.elements.volume.value=String(settings.volume);
+  if(form.elements.soundStyle)form.elements.soundStyle.value=["soft","crisp","mechanical"].includes(settings.soundStyle)?settings.soundStyle:"soft";
   form.elements.reduceMotion.checked=!!settings.reduceMotion;
 }
 function update(){
   const fd=new FormData(form),old=readSettings();
-  const next={...old,theme:String(fd.get("theme")||"dark"),font:String(fd.get("font")||"system"),cursor:String(fd.get("cursor")||"line"),compact:fd.get("compact")==="on",sound:fd.get("sound")==="on",volume:Math.min(1,Math.max(0,Number(fd.get("volume")||.18))),reduceMotion:fd.get("reduceMotion")==="on"};
+  const next={...old,theme:String(fd.get("theme")||"dark"),font:String(fd.get("font")||"system"),cursor:String(fd.get("cursor")||"line"),compact:fd.get("compact")==="on",sound:fd.get("sound")==="on",volume:Math.min(1,Math.max(0,Number(fd.get("volume")??.18))),soundStyle:["soft","crisp","mechanical"].includes(String(fd.get("soundStyle")))?String(fd.get("soundStyle")):"soft",reduceMotion:fd.get("reduceMotion")==="on"};
   localStorage.setItem(SETTINGS_KEY,JSON.stringify(next));
   applySettings(next);
   window.dispatchEvent(new CustomEvent("velocitytype:settings-changed",{detail:next}));
