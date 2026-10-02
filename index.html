@@ -11,7 +11,7 @@
 <div class="landing-bg" aria-hidden="true"><div class="landing-grid"></div><span class="landing-orb landing-orb--one"></span><span class="landing-orb landing-orb--two"></span><span class="landing-orb landing-orb--three"></span></div>
 <div id="app" class="app-shell"><header class="site-header"><nav class="navbar container" aria-label="Main navigation">
 <a class="brand" href="#top" aria-label="VelocityType home"><span class="brand__mark" aria-hidden="true">V</span><span class="brand__name">velocity<span>type</span></span></a>
-<div class="navbar__links"><a class="navbar__link navbar__link--active" href="#top">Overview</a><a class="navbar__link" href="#practice">Practice</a><a class="navbar__link" href="#progress">Progress</a><a class="navbar__link" href="#features">Features</a><a class="navbar__link" href="#principles">Principles</a></div>
+<div class="navbar__links"><a class="navbar__link navbar__link--active" href="#top">Overview</a><a class="navbar__link" href="#practice">Practice</a><a class="navbar__link" href="#progress">Progress</a><a class="navbar__link" href="#features">Features</a><a class="navbar__link" href="#principles">Principles</a><a class="navbar__link" href="#about">Developer</a></div>
 <div class="navbar__right"><button class="button button--small button--ghost" type="button" data-action="open-settings" aria-label="Open VelocityType settings">Settings</button><a class="button button--small button--primary" href="#workspace">Open workspace <span aria-hidden="true">↗</span></a></div></nav></header>
 <main id="top" class="app-main">
 <section id="workspace" class="hero container">
@@ -52,7 +52,18 @@
 <div class="progress-overview"><article class="progress-stat glass-panel reveal"><div class="progress-stat__label">Personal best</div><div id="progress-best" class="progress-stat__value numeric">0</div><div class="progress-stat__meta">WPM across saved runs</div></article><article class="progress-stat glass-panel reveal" style="transition-delay:60ms"><div class="progress-stat__label">Sessions</div><div id="progress-sessions" class="progress-stat__value numeric">0</div><div class="progress-stat__meta">Stored on this device</div></article><article class="progress-stat glass-panel reveal" style="transition-delay:120ms"><div class="progress-stat__label">Average accuracy</div><div id="progress-accuracy" class="progress-stat__value numeric">—</div><div class="progress-stat__meta">Across saved runs</div></article></div>
 <div class="analytics-card glass-panel reveal" style="transition-delay:145ms"><div class="history-card__top"><div><h3>Weekly rhythm</h3><p class="analytics-subtitle">Average WPM by day · last 7 days</p></div><span id="analytics-week-total" class="eyebrow">0 sessions</span></div><div id="weekly-chart" class="weekly-chart" role="img" aria-label="Average typing speed over the last seven days"></div><div class="analytics-insight"><span class="analytics-insight__spark" aria-hidden="true">✦</span><p id="analytics-insight-text">Complete a few tests to reveal your practice pattern.</p></div></div>
 <div class="history-card glass-panel reveal" style="transition-delay:150ms"><div class="history-card__top"><h3>Recent runs</h3><span class="eyebrow">Latest 6</span></div><div id="history-empty" class="history-empty">Complete a typing test to build your local history.</div><div id="history-list" class="history-list" aria-live="polite"></div></div>
-</section></main>
+</section>
+<section id="about" class="section container about-section">
+  <div class="section-heading reveal"><span class="eyebrow">Behind VelocityType</span><h2>About the developer.</h2><p>A little about the person building this focused typing experience.</p></div>
+  <article class="about-card glass-panel reveal">
+    <div class="about-avatar-wrap"><img class="about-avatar" src="https://github.com/Mahin98250.png" alt="Mahin Patel's GitHub profile photo" loading="lazy" decoding="async" referrerpolicy="no-referrer"><span class="about-avatar-glow" aria-hidden="true"></span></div>
+    <div class="about-copy"><span class="about-kicker"><span class="status-dot"></span> Student developer · India</span><h3>Mahin Patel</h3><p class="about-intro">I’m a student developer who enjoys turning ideas into useful digital experiences. I’m learning by building projects, exploring software, and improving one iteration at a time.</p>
+      <div class="about-tags" aria-label="Interests and skills"><span>HTML &amp; CSS</span><span>C / C++</span><span>Python learner</span><span>Web development</span><span>Robotics &amp; automation</span><span>Football</span></div>
+      <div class="about-actions"><a class="button button--primary" href="https://github.com/Mahin98250" target="_blank" rel="noopener noreferrer">Explore my GitHub <span aria-hidden="true">↗</span></a><span class="about-note">Built with curiosity, code, and consistency.</span></div>
+    </div>
+  </article>
+</section>
+</main>
 
 <nav class="mobile-dock" aria-label="Quick navigation">
   <a class="mobile-dock__item is-active" href="#top" data-mobile-nav="top">
@@ -64,6 +75,7 @@
   <a class="mobile-dock__item" href="#progress" data-mobile-nav="progress">
     <span class="mobile-dock__icon" aria-hidden="true">↗</span><span>Progress</span>
   </a>
+  <a class="mobile-dock__item" href="#about" data-mobile-nav="about"><span class="mobile-dock__icon" aria-hidden="true">✦</span><span>About</span></a>
   <button class="mobile-dock__item" type="button" data-action="open-settings" aria-label="Open VelocityType settings">
     <span class="mobile-dock__icon" aria-hidden="true">⚙</span><span>Settings</span>
   </button>
