@@ -1,23 +1,11 @@
-/**
- * VelocityType — Application Bootstrap
- * Task 1: Project Foundation
- */
-
-const APP_VERSION = "0.1.0";
-
-function initializeApp() {
-  // Keep the document marked as ready for future modules without
-  // introducing dependencies on features that do not exist yet.
-  document.documentElement.dataset.app = "velocitytype";
-  document.documentElement.dataset.appVersion = APP_VERSION;
-
-  // The foundation currently needs no runtime services. Future modules
-  // will register their own initialization from this single entry point.
-  return {
-    name: "VelocityType",
-    version: APP_VERSION,
-    ready: true
-  };
+/** VelocityType bootstrap — initializes only services that exist. */
+const APP_VERSION="0.2.0";
+/** Mark the shell ready and dismiss the decorative startup overlay. */
+function initializeApp(){
+ const root=document.documentElement;root.dataset.app="velocitytype";root.dataset.appVersion=APP_VERSION;
+ const year=document.querySelector("#copyright-year");if(year)year.textContent=String(new Date().getFullYear());
+ const loader=document.querySelector("#loading-screen");
+ if(loader){requestAnimationFrame(()=>{loader.classList.add("is-hidden");loader.addEventListener("transitionend",()=>loader.remove(),{once:true});window.setTimeout(()=>loader.remove(),650);});}
+ root.dataset.ready="true";return{name:"VelocityType",version:APP_VERSION,ready:true};
 }
-
 initializeApp();
