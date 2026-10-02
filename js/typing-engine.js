@@ -56,24 +56,43 @@ function getSettings(){
     return value&&typeof value==="object"?value:{};
   }catch(error){return {};}
 }
-function playTone(frequency,{duration=.055,wave="sine",level=.45,delay=0}={}){
+function getAudioContext(){
   const AudioCtor=window.AudioContext||window.webkitAudioContext;
-  if(!AudioCtor)return;
-  audioContext??=new AudioCtor();
-  if(audioContext.state==="suspended")audioContext.resume().catch(()=>{});
-  const now=audioContext.currentTime+delay,osc=audioContext.createOscillator(),gain=audioContext.createGain();
-  const soundSettings=getSettings();
-  const style=soundSettings.soundStyle||"soft";
+  if(!AudioCtor)return null;
+  try{audioContext??=new AudioCtor();return audioContext;}catch(error){return null;}
+}
+function unlockAudio(){
+  const context=getAudioContext();
+  if(!context)return;
+  if(context.state==="suspended")context.resume().catch(()=>{});
+}
+function playTone(frequency,{duration=.055,wave="sine",level=.45,delay=0}={}){
+  const settings=getSettings();
+  const volumeSetting=Number(settings.volume??.18);
+  if(!Number.isFinite(volumeSetting)||volumeSetting<=0)return;
+  const context=getAudioContext();
+  if(!context)return;
+  const style=settings.soundStyle||"soft";
   const profiles={soft:{wave:"sine",durationScale:.82,volumeScale:.8,frequencyScale:1},crisp:{wave:"triangle",durationScale:.72,volumeScale:.95,frequencyScale:1.16},mechanical:{wave:"square",durationScale:.52,volumeScale:.48,frequencyScale:.72}};
   const profile=profiles[style]||profiles.soft;
-  const volume=Math.min(.045,Math.max(.0001,Number(soundSettings.volume??.18)*.12*level*profile.volumeScale));
-  duration*=profile.durationScale;
-  osc.type=profile.wave||wave;osc.frequency.setValueAtTime(frequency*profile.frequencyScale,now);
-  gain.gain.setValueAtTime(.0001,now);
-  gain.gain.exponentialRampToValueAtTime(volume,now+.006);
-  gain.gain.exponentialRampToValueAtTime(.0001,now+duration);
-  osc.connect(gain);gain.connect(audioContext.destination);
-  osc.start(now);osc.stop(now+duration+.01);
+  const schedule=()=>{
+    if(context.state!=="running")return;
+    try{
+      const now=context.currentTime+delay,osc=context.createOscillator(),gain=context.createGain();
+      const peak=Math.min(.045,Math.max(.0001,volumeSetting*.12*level*profile.volumeScale));
+      const length=Math.max(.025,duration*profile.durationScale);
+      osc.type=profile.wave||wave;
+      osc.frequency.setValueAtTime(frequency*profile.frequencyScale,now);
+      gain.gain.setValueAtTime(.0001,now);
+      gain.gain.exponentialRampToValueAtTime(peak,now+.006);
+      gain.gain.exponentialRampToValueAtTime(.0001,now+length);
+      osc.connect(gain);gain.connect(context.destination);
+      osc.start(now);osc.stop(now+length+.012);
+      osc.onended=()=>{osc.disconnect();gain.disconnect();};
+    }catch(error){console.warn("VelocityType: audio playback unavailable.",error);}
+  };
+  if(context.state==="suspended")context.resume().then(schedule).catch(()=>{});
+  else schedule();
 }
 function playKeySound(correct,char=""){
   const settings=getSettings();
@@ -87,7 +106,9 @@ function playFinishSound(){
   if(!getSettings().sound)return;
   try{[660,830,990].forEach((frequency,index)=>playTone(frequency,{duration:.16,level:.8,delay:index*.085}));}catch(error){}
 }
-window.addEventListener("velocitytype:preview-sound",()=>{try{playTone(560,{duration:.07,level:1});playTone(760,{duration:.11,level:.8,delay:.09});}catch(error){}});
+window.addEventListener("velocitytype:preview-sound",()=>{unlockAudio();playTone(560,{duration:.07,level:1});playTone(760,{duration:.11,level:.8,delay:.09});});
+document.addEventListener("pointerdown",unlockAudio,{passive:true});
+document.addEventListener("keydown",unlockAudio);
 
 function pickText(mode){
   const list=TEST_TEXTS[mode]||TEST_TEXTS.random;
