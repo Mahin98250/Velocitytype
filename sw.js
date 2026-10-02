@@ -1,4 +1,4 @@
-const CACHE_NAME="velocitytype-static-v10";
+const CACHE_NAME="velocitytype-static-v11";
 const APP_SHELL=[
   "./",
   "./index.html",
