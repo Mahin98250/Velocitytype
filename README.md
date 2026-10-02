@@ -1,25 +1,23 @@
 # VelocityType
 
-Premium typing speed platform built with:
+Premium, offline-first typing speed platform built with HTML, CSS, Vanilla JavaScript, Chart.js, and Local Storage.
 
-- HTML
-- CSS
-- Vanilla JavaScript
-- Chart.js
-- Local Storage
+No React, Vue, Angular, backend, database, Firebase, Node.js, AI APIs, or paid APIs.
 
-No framework, backend, database, Firebase, Node.js, or paid APIs.
+## Development approach
+The application is developed in small, independently testable increments. Each task adds only what is needed at that stage and avoids importing future modules.
 
-## Development principle
+## Current implementation
+- Semantic HTML application shell
+- Responsive dark-first design foundation
+- CSS reset, design tokens, typography, layout, and utility styles
+- Responsive navigation and footer shell
+- Accessible focus treatment and reduced-motion support
+- Startup overlay and JavaScript bootstrap
+- Introductory feature tiles
 
-VelocityType is being developed in small, independently testable tasks. Each task adds only the code required for that stage and avoids dependencies on future, unwritten modules.
+## Run locally
+Open index.html in a modern browser. No build step or backend is required. Google Fonts are optional; system font fallbacks keep the interface usable without network access.
 
-## Current status
-
-Task 1 — Project Foundation
-
-The repository currently contains the semantic HTML shell, base reset, shared design tokens, global layout styling, and the application bootstrap.
-
-## Offline-first
-
-The core application is designed to run locally without a backend. Third-party CDN assets will only be introduced in tasks where they are actually required.
+## Next stages
+Landing experience, typing interface and engine, results, local statistics, achievements, keyboard analytics, settings, and final QA will be added progressively.
