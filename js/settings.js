@@ -10,6 +10,7 @@ const exportButton=document.querySelector("#export-history");
 const importButton=document.querySelector("#import-history");
 const resetButton=document.querySelector("#reset-history");
 const importInput=document.querySelector("#import-file");
+const previewSound=document.querySelector("#preview-key-sound");
 
 function readSettings(){
   try{const v=JSON.parse(localStorage.getItem(SETTINGS_KEY)||"null");return {...DEFAULTS,...(v&&typeof v==="object"?v:{})};}
@@ -79,6 +80,7 @@ function bind(){
   modal?.addEventListener("click",e=>{if(e.target===modal)closeSettings();});
   document.addEventListener("keydown",e=>{if(e.key==="Escape"&&modal?.classList.contains("is-open"))closeSettings();});
   form?.addEventListener("change",update);
+  previewSound?.addEventListener("click",()=>window.dispatchEvent(new Event("velocitytype:preview-sound")));
   exportButton?.addEventListener("click",exportHistory);
   resetButton?.addEventListener("click",resetHistory);
   importButton?.addEventListener("click",()=>importInput?.click());
