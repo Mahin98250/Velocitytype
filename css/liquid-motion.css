@@ -284,5 +284,5 @@ html{scroll-behavior:smooth}
 /* Prevent accidental highlighting during navigation and touch interaction.
    Explicitly preserve selection in editable and copy-friendly content. */
 body,.app-shell,.app-shell *{-webkit-user-select:none;user-select:none;-webkit-tap-highlight-color:transparent}
-input,textarea,select,[contenteditable="true"],[data-selectable="true"],.typing-copy,.result-detail,.analytics-insight__text,.about-intro,.about-tags span,.site-footer p{-webkit-user-select:text;user-select:text}
+input,textarea,select,[contenteditable="true"],[data-selectable="true"],.result-detail,.analytics-insight__text,.about-intro,.about-tags span,.site-footer p{-webkit-user-select:text;user-select:text}
 button,a,label,.mobile-dock__item,.navbar__link{-webkit-user-select:none;user-select:none}
