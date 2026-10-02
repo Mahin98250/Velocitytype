@@ -2,7 +2,8 @@
 (()=>{
   const finePointer=window.matchMedia("(hover: hover) and (pointer: fine)");
   const reduced=window.matchMedia("(prefers-reduced-motion: reduce)");
-  if(!finePointer.matches||reduced.matches)return;
+  const motionAllowed=()=>finePointer.matches&&!reduced.matches&&document.documentElement.dataset.forceReducedMotion!=="true";
+  if(!motionAllowed())return;
   const targets=".glass-panel,.typing-preview,.typing-surface";
   let active=null,frame=0,x=0,y=0;
   document.addEventListener("pointerover",event=>{
@@ -14,7 +15,7 @@
   },{passive:true});
   document.addEventListener("pointermove",event=>{
     const node=event.target.closest?.(targets);
-    if(!node)return;
+    if(!node||!motionAllowed())return;
     active=node;x=event.clientX;y=event.clientY;
     if(frame)return;
     frame=requestAnimationFrame(()=>{
@@ -27,6 +28,6 @@
   },{passive:true});
   document.addEventListener("pointerdown",event=>{
     const node=event.target.closest?.(targets);
-    if(node){node.style.setProperty("--pointer-x",(event.clientX-node.getBoundingClientRect().left)+"px");node.style.setProperty("--pointer-y",(event.clientY-node.getBoundingClientRect().top)+"px");}
+    if(node&&motionAllowed()){node.style.setProperty("--pointer-x",(event.clientX-node.getBoundingClientRect().left)+"px");node.style.setProperty("--pointer-y",(event.clientY-node.getBoundingClientRect().top)+"px");}
   },{passive:true});
 })();
