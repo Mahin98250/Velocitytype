@@ -1,6 +1,6 @@
 /* VelocityType settings, history import/export, and local personalization. */
 const SETTINGS_KEY="velocitytype.settings.v1";
-const DEFAULTS={theme:"dark",font:"system",cursor:"line",compact:false,sound:false,volume:.18,soundStyle:"soft",reduceMotion:false};
+const DEFAULTS={theme:"dark",font:"system",cursor:"line",compact:false,sound:true,volume:.18,soundStyle:"mechanical",reduceMotion:false};
 const root=document.documentElement;
 const modal=document.querySelector("#settings-modal");
 const form=document.querySelector("#settings-form");
