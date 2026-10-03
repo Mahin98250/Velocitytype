@@ -13,3 +13,7 @@
 @media(max-width:760px){.practice-header{align-items:start;flex-direction:column}.practice-stats{grid-template-columns:repeat(2,1fr)}.typing-surface{min-height:360px}.practice-status{align-items:flex-start;flex-direction:column}}
 @media(max-width:420px){.segmented{width:100%;overflow:auto}.segmented button{flex:1 0 auto}.practice-actions{width:100%}.practice-actions .icon-button{flex:1}.practice-stats{gap:.55rem}.live-stat{padding:.75rem}.typing-copy{font-size:.94rem;line-height:1.9}}
 @media(prefers-reduced-motion:reduce){.typing-copy .char.is-current:after{animation:none}.result-panel.is-visible{animation:none}}
+
+/* Subtle tactile feedback pulse on the live typing surface. */
+.typing-surface.is-running{transition:border-color 180ms ease,box-shadow 180ms ease}
+@media(prefers-reduced-motion:no-preference){.typing-copy .char.is-correct{transition:color 65ms linear,background-color 65ms linear}}
