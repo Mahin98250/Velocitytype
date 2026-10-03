@@ -49,6 +49,7 @@ const els={
 };
 const state={duration:15,mode:"random",text:"",startedAt:0,elapsedBeforePause:0,running:false,paused:false,finished:false,raf:0,correct:0,errors:0,lastValueLength:0};
 let audioContext=null;
+let mechanicalNoiseBuffer=null;
 
 function getSettings(){
   try{
@@ -73,7 +74,7 @@ function playTone(frequency,{duration=.055,wave="sine",level=.45,delay=0}={}){
   const context=getAudioContext();
   if(!context)return;
   const style=settings.soundStyle||"soft";
-  const profiles={soft:{wave:"sine",durationScale:.82,volumeScale:.8,frequencyScale:1},crisp:{wave:"triangle",durationScale:.72,volumeScale:.95,frequencyScale:1.16},mechanical:{wave:"square",durationScale:.52,volumeScale:.48,frequencyScale:.72}};
+  const profiles={soft:{wave:"sine",durationScale:.82,volumeScale:.8,frequencyScale:1},crisp:{wave:"triangle",durationScale:.72,volumeScale:.95,frequencyScale:1.16},mechanical:{wave:"triangle",durationScale:.48,volumeScale:.7,frequencyScale:.68}};
   const profile=profiles[style]||profiles.soft;
   const schedule=()=>{
     if(context.state!=="running")return;
@@ -89,6 +90,21 @@ function playTone(frequency,{duration=.055,wave="sine",level=.45,delay=0}={}){
       osc.connect(gain);gain.connect(context.destination);
       osc.start(now);osc.stop(now+length+.012);
       osc.onended=()=>{osc.disconnect();gain.disconnect();};
+      if(style==="mechanical"){
+        if(!mechanicalNoiseBuffer){
+          const sampleCount=Math.ceil(context.sampleRate*.07);
+          mechanicalNoiseBuffer=context.createBuffer(1,sampleCount,context.sampleRate);
+          const samples=mechanicalNoiseBuffer.getChannelData(0);
+          for(let i=0;i<sampleCount;i++)samples[i]=(Math.random()*2-1)*(1-i/sampleCount);
+        }
+        const click=context.createBufferSource(),filter=context.createBiquadFilter(),clickGain=context.createGain();
+        click.buffer=mechanicalNoiseBuffer;filter.type="highpass";filter.frequency.setValueAtTime(1450,now);
+        clickGain.gain.setValueAtTime(Math.max(.0001,peak*.9),now);
+        clickGain.gain.exponentialRampToValueAtTime(.0001,now+.024);
+        click.connect(filter);filter.connect(clickGain);clickGain.connect(context.destination);
+        click.start(now);click.stop(now+.027);
+        click.onended=()=>{click.disconnect();filter.disconnect();clickGain.disconnect();};
+      }
     }catch(error){console.warn("VelocityType: audio playback unavailable.",error);}
   };
   if(context.state==="suspended")context.resume().then(schedule).catch(()=>{});
@@ -260,8 +276,9 @@ function handleInput(){
   });
   state.correct=correct;state.errors=errors;
   if(grew){
-    const index=value.length-1;
-    playKeySound(value[index]===state.text[index],value[index]);
+    for(let index=state.lastValueLength;index<value.length;index++){
+      playKeySound(value[index]===state.text[index],value[index]);
+    }
   }
   state.lastValueLength=value.length;
   updateMetrics();
