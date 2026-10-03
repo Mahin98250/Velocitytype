@@ -74,11 +74,11 @@ function playMechanicalClick(kind="press",char=""){
   const schedule=()=>{
     if(context.state!=="running")return;
     try{
-      const now=context.currentTime,variation=char?char.charCodeAt(0)%5:0,isBackspace=kind==="backspace";
-      const peak=Math.min(.055,Math.max(.0001,volume*.18*(isBackspace?.48:1)));
+      const now=context.currentTime,variation=char?char.charCodeAt(0)%5:0,isBackspace=kind==="backspace",isError=kind==="error";
+      const peak=Math.min(.055,Math.max(.0001,volume*.18*(isBackspace?.48:isError?.72:1)));
       const body=context.createOscillator(),bodyGain=context.createGain();
-      body.type="triangle";body.frequency.setValueAtTime(isBackspace?145:205+variation*13,now);
-      body.frequency.exponentialRampToValueAtTime(isBackspace?82:112,now+.052);
+      body.type="triangle";body.frequency.setValueAtTime(isBackspace?145:isError?315:205+variation*13,now);
+      body.frequency.exponentialRampToValueAtTime(isBackspace?82:isError?178:112,now+.052);
       bodyGain.gain.setValueAtTime(.0001,now);bodyGain.gain.exponentialRampToValueAtTime(peak,now+.003);
       bodyGain.gain.exponentialRampToValueAtTime(.0001,now+(isBackspace?.042:.068));
       body.connect(bodyGain);bodyGain.connect(context.destination);body.start(now);body.stop(now+.075);
@@ -86,7 +86,7 @@ function playMechanicalClick(kind="press",char=""){
       const noise=context.createBuffer(1,length,context.sampleRate),data=noise.getChannelData(0);
       for(let i=0;i<length;i++)data[i]=(Math.random()*2-1)*(1-i/length);
       const source=context.createBufferSource(),filter=context.createBiquadFilter(),noiseGain=context.createGain();
-      source.buffer=noise;filter.type="bandpass";filter.frequency.setValueAtTime(isBackspace?1050:2100+variation*180,now);filter.Q.setValueAtTime(.8,now);
+      source.buffer=noise;filter.type="bandpass";filter.frequency.setValueAtTime(isBackspace?1050:isError?2950:2100+variation*180,now);filter.Q.setValueAtTime(.8,now);
       noiseGain.gain.setValueAtTime(Math.max(.0001,peak*(isBackspace?.35:.72)),now);
       noiseGain.gain.exponentialRampToValueAtTime(.0001,now+(isBackspace?.016:.03));
       source.connect(filter);filter.connect(noiseGain);noiseGain.connect(context.destination);source.start(now);source.stop(now+.034);
@@ -114,7 +114,7 @@ function playTone(frequency,{duration=.055,wave="sine",level=.45,delay=0}={}){
 function playKeySound(correct,char="",kind="press"){
   const settings=getSettings();if(!settings.sound)return;
   try{
-    if(settings.soundStyle==="mechanical"){playMechanicalClick(correct?kind:"backspace",char);return;}
+    if(settings.soundStyle==="mechanical"){playMechanicalClick(correct?kind:"error",char);return;}
     const pitch=correct?420+(char.charCodeAt(0)%7)*22:175;
     playTone(pitch,{duration:correct?.045:.085,wave:correct?"sine":"triangle",level:correct?.65:1});
   }catch(error){}
