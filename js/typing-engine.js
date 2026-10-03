@@ -47,7 +47,7 @@ const els={
   progressBar:document.querySelector("#typing-progress-bar"),
   retry:document.querySelector("#retry-test")
 };
-const state={duration:15,mode:"random",text:"",startedAt:0,elapsedBeforePause:0,running:false,paused:false,finished:false,raf:0,correct:0,errors:0,lastValueLength:0};
+const state={duration:15,mode:"random",text:"",startedAt:0,elapsedBeforePause:0,running:false,paused:false,finished:false,raf:0,correct:0,errors:0,lastValueLength:0,mistakes:{}};
 let audioContext=null;
 let mechanicalNoiseBuffer=null;
 
@@ -162,7 +162,7 @@ function renderText(){
   els.copy.appendChild(frag);
 }
 function resetStats(){
-  state.correct=0;state.errors=0;state.startedAt=0;state.elapsedBeforePause=0;
+  state.correct=0;state.errors=0;state.mistakes={};state.startedAt=0;state.elapsedBeforePause=0;
   state.running=false;state.paused=false;state.finished=false;state.lastValueLength=0;
   if(state.raf)cancelAnimationFrame(state.raf);
   els.pause.textContent="Pause";els.pause.disabled=true;
@@ -250,7 +250,7 @@ function finish(reason){
   const score=Math.round(m.wpm);
   els.resultScore.textContent=score+" WPM";
   els.resultDetail.textContent=score+" WPM · "+m.accuracy.toFixed(1)+"% accuracy · "+state.errors+" errors · "+formatTime(state.elapsedBeforePause);
-  const session={wpm:score,cpm:Math.round(m.cpm),accuracy:Number(m.accuracy.toFixed(1)),errors:state.errors,duration:state.duration,mode:state.mode,elapsed:state.elapsedBeforePause,createdAt:new Date().toISOString()};
+  const session={wpm:score,cpm:Math.round(m.cpm),accuracy:Number(m.accuracy.toFixed(1)),errors:state.errors,duration:state.duration,mode:state.mode,elapsed:state.elapsedBeforePause,mistakes:{...state.mistakes},createdAt:new Date().toISOString()};
   saveSession(session);
   window.dispatchEvent(new CustomEvent("velocitytype:session-complete",{detail:session}));
   if(els.resultBest)els.resultBest.textContent="Personal best: "+getBestWpm()+" WPM";
@@ -280,6 +280,9 @@ function handleInput(event){
     if(isIncorrect)errors++;
   });
   state.correct=correct;state.errors=errors;
+  const mistakes={};
+  for(let index=0;index<value.length;index++){if(value[index]!==state.text[index]){const key=state.text[index];mistakes[key]=(mistakes[key]||0)+1;}}
+  state.mistakes=mistakes;
   if(grew){
     for(let index=state.lastValueLength;index<value.length;index++){
       playKeySound(value[index]===state.text[index],value[index],"press");
