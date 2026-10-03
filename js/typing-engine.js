@@ -67,59 +67,64 @@ function unlockAudio(){
   if(!context)return;
   if(context.state==="suspended")context.resume().catch(()=>{});
 }
-function playTone(frequency,{duration=.055,wave="sine",level=.45,delay=0}={}){
-  const settings=getSettings();
-  const volumeSetting=Number(settings.volume??.18);
-  if(!Number.isFinite(volumeSetting)||volumeSetting<=0)return;
-  const context=getAudioContext();
-  if(!context)return;
-  const style=settings.soundStyle||"soft";
-  const profiles={soft:{wave:"sine",durationScale:.82,volumeScale:.8,frequencyScale:1},crisp:{wave:"triangle",durationScale:.72,volumeScale:.95,frequencyScale:1.16},mechanical:{wave:"triangle",durationScale:.48,volumeScale:.7,frequencyScale:.68}};
-  const profile=profiles[style]||profiles.soft;
+function playMechanicalClick(kind="press",char=""){
+  const settings=getSettings(),volume=Number(settings.volume??.18);
+  if(!settings.sound||!Number.isFinite(volume)||volume<=0)return;
+  const context=getAudioContext();if(!context)return;
   const schedule=()=>{
     if(context.state!=="running")return;
     try{
-      const now=context.currentTime+delay,osc=context.createOscillator(),gain=context.createGain();
-      const peak=Math.min(.045,Math.max(.0001,volumeSetting*.12*level*profile.volumeScale));
-      const length=Math.max(.025,duration*profile.durationScale);
-      osc.type=profile.wave||wave;
-      osc.frequency.setValueAtTime(frequency*profile.frequencyScale,now);
-      gain.gain.setValueAtTime(.0001,now);
-      gain.gain.exponentialRampToValueAtTime(peak,now+.006);
-      gain.gain.exponentialRampToValueAtTime(.0001,now+length);
-      osc.connect(gain);gain.connect(context.destination);
-      osc.start(now);osc.stop(now+length+.012);
-      osc.onended=()=>{osc.disconnect();gain.disconnect();};
-      if(style==="mechanical"){
-        if(!mechanicalNoiseBuffer){
-          const sampleCount=Math.ceil(context.sampleRate*.07);
-          mechanicalNoiseBuffer=context.createBuffer(1,sampleCount,context.sampleRate);
-          const samples=mechanicalNoiseBuffer.getChannelData(0);
-          for(let i=0;i<sampleCount;i++)samples[i]=(Math.random()*2-1)*(1-i/sampleCount);
-        }
-        const click=context.createBufferSource(),filter=context.createBiquadFilter(),clickGain=context.createGain();
-        click.buffer=mechanicalNoiseBuffer;filter.type="highpass";filter.frequency.setValueAtTime(1450,now);
-        clickGain.gain.setValueAtTime(Math.max(.0001,peak*.9),now);
-        clickGain.gain.exponentialRampToValueAtTime(.0001,now+.024);
-        click.connect(filter);filter.connect(clickGain);clickGain.connect(context.destination);
-        click.start(now);click.stop(now+.027);
-        click.onended=()=>{click.disconnect();filter.disconnect();clickGain.disconnect();};
-      }
+      const now=context.currentTime,variation=char?char.charCodeAt(0)%5:0,isBackspace=kind==="backspace";
+      const peak=Math.min(.055,Math.max(.0001,volume*.18*(isBackspace?.48:1)));
+      const body=context.createOscillator(),bodyGain=context.createGain();
+      body.type="triangle";body.frequency.setValueAtTime(isBackspace?145:205+variation*13,now);
+      body.frequency.exponentialRampToValueAtTime(isBackspace?82:112,now+.052);
+      bodyGain.gain.setValueAtTime(.0001,now);bodyGain.gain.exponentialRampToValueAtTime(peak,now+.003);
+      bodyGain.gain.exponentialRampToValueAtTime(.0001,now+(isBackspace?.042:.068));
+      body.connect(bodyGain);bodyGain.connect(context.destination);body.start(now);body.stop(now+.075);
+      const length=Math.ceil(context.sampleRate*(isBackspace?.018:.032));
+      const noise=context.createBuffer(1,length,context.sampleRate),data=noise.getChannelData(0);
+      for(let i=0;i<length;i++)data[i]=(Math.random()*2-1)*(1-i/length);
+      const source=context.createBufferSource(),filter=context.createBiquadFilter(),noiseGain=context.createGain();
+      source.buffer=noise;filter.type="bandpass";filter.frequency.setValueAtTime(isBackspace?1050:2100+variation*180,now);filter.Q.setValueAtTime(.8,now);
+      noiseGain.gain.setValueAtTime(Math.max(.0001,peak*(isBackspace?.35:.72)),now);
+      noiseGain.gain.exponentialRampToValueAtTime(.0001,now+(isBackspace?.016:.03));
+      source.connect(filter);filter.connect(noiseGain);noiseGain.connect(context.destination);source.start(now);source.stop(now+.034);
+      body.onended=()=>{body.disconnect();bodyGain.disconnect();};source.onended=()=>{source.disconnect();filter.disconnect();noiseGain.disconnect();};
+    }catch(error){console.warn("VelocityType: mechanical audio unavailable.",error);}
+  };
+  if(context.state==="suspended")context.resume().then(schedule).catch(()=>{});else schedule();
+}
+function playTone(frequency,{duration=.055,wave="sine",level=.45,delay=0}={}){
+  const settings=getSettings(),volumeSetting=Number(settings.volume??.18);
+  if(!Number.isFinite(volumeSetting)||volumeSetting<=0)return;
+  const context=getAudioContext();if(!context)return;
+  const schedule=()=>{
+    if(context.state!=="running")return;
+    try{
+      const now=context.currentTime+delay,osc=context.createOscillator(),gain=context.createGain(),peak=Math.min(.045,Math.max(.0001,volumeSetting*.12*level));
+      osc.type=wave;osc.frequency.setValueAtTime(frequency,now);
+      gain.gain.setValueAtTime(.0001,now);gain.gain.exponentialRampToValueAtTime(peak,now+.004);
+      gain.gain.exponentialRampToValueAtTime(.0001,now+duration);
+      osc.connect(gain);gain.connect(context.destination);osc.start(now);osc.stop(now+duration+.01);osc.onended=()=>{osc.disconnect();gain.disconnect();};
     }catch(error){console.warn("VelocityType: audio playback unavailable.",error);}
   };
-  if(context.state==="suspended")context.resume().then(schedule).catch(()=>{});
-  else schedule();
+  if(context.state==="suspended")context.resume().then(schedule).catch(()=>{});else schedule();
 }
-function playKeySound(correct,char=""){
-  const settings=getSettings();
-  if(!settings.sound)return;
+function playKeySound(correct,char="",kind="press"){
+  const settings=getSettings();if(!settings.sound)return;
   try{
+    if(settings.soundStyle==="mechanical"){playMechanicalClick(correct?kind:"backspace",char);return;}
     const pitch=correct?420+(char.charCodeAt(0)%7)*22:175;
     playTone(pitch,{duration:correct?.045:.085,wave:correct?"sine":"triangle",level:correct?.65:1});
   }catch(error){}
 }
 function playFinishSound(){
-  if(!getSettings().sound)return;
+  const settings=getSettings();if(!settings.sound)return;
+  if(settings.soundStyle==="mechanical"){
+    [0,1,2].forEach((n)=>setTimeout(()=>playMechanicalClick("press",String(n)),n*75));
+    return;
+  }
   try{[660,830,990].forEach((frequency,index)=>playTone(frequency,{duration:.16,level:.8,delay:index*.085}));}catch(error){}
 }
 window.addEventListener("velocitytype:preview-sound",()=>{unlockAudio();playTone(560,{duration:.07,level:1});playTone(760,{duration:.11,level:.8,delay:.09});});
@@ -257,7 +262,7 @@ function tick(){
   if(metrics().elapsed>=state.duration*1000){finish("Time");return;}
   state.raf=requestAnimationFrame(tick);
 }
-function handleInput(){
+function handleInput(event){
   if(state.finished)return;
   const value=els.input.value.slice(0,state.text.length);
   if(value.length>0&&!state.running&&!state.paused)begin();
@@ -277,8 +282,10 @@ function handleInput(){
   state.correct=correct;state.errors=errors;
   if(grew){
     for(let index=state.lastValueLength;index<value.length;index++){
-      playKeySound(value[index]===state.text[index],value[index]);
+      playKeySound(value[index]===state.text[index],value[index],"press");
     }
+  }else if(value.length<state.lastValueLength && event?.inputType?.startsWith("delete")){
+    playKeySound(true,"","backspace");
   }
   state.lastValueLength=value.length;
   updateMetrics();
