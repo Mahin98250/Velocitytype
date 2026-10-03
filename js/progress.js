@@ -66,7 +66,10 @@ function renderWeek(sessions){
   const bestDay=active.reduce((best,day)=>day.average>best.average?day:best,active[0]);
   const practiceDays=active.length;
   const avg=active.reduce((sum,day)=>sum+day.average,0)/practiceDays;
-  insightEl.textContent="You practiced on "+practiceDays+" of the last 7 days. Your strongest daily average was "+Math.round(bestDay.average)+" WPM ("+bestDay.label+"); active-day average: "+Math.round(avg)+" WPM.";
+  const errorTotals={};
+  sessions.forEach(session=>{const mistakes=session&&session.mistakes&&typeof session.mistakes==="object"?session.mistakes:{};Object.entries(mistakes).forEach(([character,count])=>{const amount=Number(count);if(character.length===1&&Number.isFinite(amount)&&amount>0)errorTotals[character]=(errorTotals[character]||0)+amount;});});
+  const weakest=Object.entries(errorTotals).sort((a,b)=>b[1]-a[1])[0];
+  insightEl.textContent="You practiced on "+practiceDays+" of the last 7 days. Your strongest daily average was "+Math.round(bestDay.average)+" WPM ("+bestDay.label+"); active-day average: "+Math.round(avg)+" WPM."+(weakest?" Focus suggestion: review the "+(weakest[0]===" "?"space":JSON.stringify(weakest[0]))+" key, which appears in "+weakest[1]+" recorded errors.":"");
 }
 function renderHistory(){
   const sessions=readSessions();
