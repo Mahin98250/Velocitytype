@@ -43,3 +43,13 @@ The repo is intentionally being assembled in small, independently testable layer
 
 ## Run locally
 Open index.html in a modern browser. No build step or backend is required. Google Fonts are optional; system fallbacks keep the interface usable without network access.
+
+---
+
+## Project links
+
+- **GitHub profile:** https://github.com/Mahin98250
+- **Portfolio repository:** https://github.com/Mahin98250/Porfolio
+- **More projects:** https://github.com/Mahin98250?tab=repositories
+
+> Live demo links will be added only after the deployment URL is verified.
